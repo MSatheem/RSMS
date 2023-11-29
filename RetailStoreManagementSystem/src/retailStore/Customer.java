@@ -14,11 +14,11 @@ public class Customer {
 	private int contactNumber;
 	private String email;
 	private Date joiningDate;
-	
+
 	//connection 
 	Connection con;
-	
-	
+
+
 	//constructor
 	public Customer(int id, String name, String address, String city, int contactNumber, String email, Date joiningDate) {
 		super();
@@ -30,7 +30,7 @@ public class Customer {
 		this.email = email;
 		this.joiningDate = joiningDate;
 	}
-	
+
 	public Customer(String name, String address, String city, int contactNumber, String email, Date joiningDate) {
 		super();
 		this.name = name;
@@ -63,7 +63,7 @@ public class Customer {
 	public Date getJoiningDate() {
 		return joiningDate;
 	}
-	
+
 	//setters
 	public void setId(int id) {
 		this.id = id;
@@ -86,7 +86,7 @@ public class Customer {
 	public void setJoiningDate(Date joiningDate) {
 		this.joiningDate = joiningDate;
 	}
-	
+
 	//save new customer
 	public void  saveNewCustomer() {
 		connectToDatabase();
@@ -102,40 +102,34 @@ public class Customer {
 			pst.setString(6, this.email);
 			//pst.setDate(7, this.joiningDate);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		closeConnection();
-		
-		
-		
-		 
-	
+
+		closeConnection();	
 	}
-	
-	
+
+
 	//establishing connection to database
-		private void connectToDatabase() {
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/rsms","root","");
-				System.out.println("Connected");
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+	private void connectToDatabase() {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/rsms","root","");
+			System.out.println("Connected");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		
-		//closing connection to database
-		private void closeConnection() {
-			try {
-				con.close();
-				System.out.println("Connection closed");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+	}
+
+	//closing connection to database
+	private void closeConnection() {
+		try {
+			con.close();
+			System.out.println("Connection closed");
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		
+	}
+
 }
