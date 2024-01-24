@@ -15,15 +15,17 @@ public class Product {
 	Connection con;
 	
 	//constructors
+	public Product(int id) {
+		this.id = id;
+	}
+	
 	public Product(int id, String name, int supplierId) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.supplierId = supplierId;
 	}
 	
 	public Product(String name, int supplierId) {
-		super();
 		this.id = nextId();
 		this.name = name;
 		this.supplierId = supplierId;
@@ -64,8 +66,8 @@ public class Product {
 		this.supplierId = supplierId;
 	}
 	
-	//saving customer to database
-	public void saveCustomer() {
+	//saving product to database
+	public void saveProduct() {
 		connectToDatabase();
 		PreparedStatement pst;
 		
@@ -76,11 +78,50 @@ public class Product {
 			pst.setInt(3, this.supplierId);
 			pst.setInt(4, this.quantityInStock);
 			pst.executeUpdate();
-			System.out.println(toString() + "Saved to database");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		closeConnection();
+	}
+	
+	public Product getProductInfo(int id) {
+		connectToDatabase();
+		PreparedStatement pst;
+		ResultSet rst;
+		Product product = new Product(id);
+		
+		try {
+			pst = con.prepareStatement("SELECT name,supplierId,inStock FROM product WHERE id = ?");
+			rst = pst.executeQuery();
+			if(rst.next()) {
+				product.name = rst.getString(1);
+				product.supplierId = rst.getInt(2);
+				product.quantityInStock = rst.getInt(3);
+				return product;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;	
+	}
+	
+	public boolean isProductSaved() {
+		connectToDatabase();
+		PreparedStatement pst;
+		ResultSet rst;
+		try {
+			pst = con.prepareStatement("SELECT * FROM CUSTOMER WHERE id = ?");
+			pst.setInt(1, id);
+			rst = pst.executeQuery();
+			if(rst.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	//retrieving next id that will be allocated
@@ -108,7 +149,6 @@ public class Product {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/rsms","root","");
-			System.out.println("Connected");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -120,7 +160,6 @@ public class Product {
 	private void closeConnection() {
 		try {
 			con.close();
-			System.out.println("Connection closed");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
