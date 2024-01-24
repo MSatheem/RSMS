@@ -3,6 +3,7 @@ package retailStore;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -22,6 +23,9 @@ public class Supplier {
 	Connection con;
 	
 	//constructors
+	public Supplier() {
+	}
+	
 	public Supplier(int id, String name, String address, String email, int contactNumber, String contactPerson) {
 		this.id = id;
 		this.name = name;
@@ -39,7 +43,6 @@ public class Supplier {
 		this.contactPerson = contactPerson;
 	}
 
-	
 	//getters
 	public int getId() {
 		return id;
@@ -109,6 +112,47 @@ public class Supplier {
 		closeConnection();
 	}
 	
+	public Supplier getSuppilerDetail() {
+		connectToDatabase();
+		PreparedStatement pst;
+		ResultSet rst;
+		
+		try {
+			pst = con.prepareStatement("SELECT name,address,email,contactNumber,contactPerson FROM supplier WHERE id = ?");
+			pst.setInt(1, this.id);
+			rst = pst.executeQuery();
+			if(rst.next()) {
+				String name = rst.getString(1);
+				String address = rst.getString(2);
+				String email = rst.getString(3);
+				int contactNumber = rst.getInt(4);
+				String contactPerson = rst.getString(5);
+				Supplier supplier = new Supplier(this.id, name, address, email,contactNumber,contactPerson);
+				return supplier;
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public boolean isSaved() {
+		connectToDatabase();
+		PreparedStatement pst;
+		ResultSet rst;
+		
+		try {
+			pst = con.prepareStatement("SELECT name FROM supplier WHERE id = ?");
+			pst.setInt(1, id);
+			rst = pst.executeQuery();
+			if(rst.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 	
 	//establishing connection to database
 	private void connectToDatabase() {
