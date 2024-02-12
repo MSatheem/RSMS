@@ -72,13 +72,7 @@ public class InboundProduct extends Product{
 			pst.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
+		}	
 	}	
 	
-	@Override
-	public String toString() {
-		return "InboundProduct [purchasePrice=" + purchasePrice + ", salePrice=" + salePrice + ", batchNo=" + batchNo
-				+ ", mfgDate=" + mfgDate + ", expDate=" + expDate + ", quantityIn=" + quantityIn + ", getId()=" + getId() + ", getName()=" + getName() + "]";
-	}
 }
