@@ -77,7 +77,7 @@ public class InboundProductList {
 			rst = pst.executeQuery();
 			if(rst.next()) {
 				logNo = rst.getInt(1);
-				pst2 = con.prepareStatement("INSERT INTO inbound_product (logNo, productId, purchasePrice, batchNo, mfgDate, expDate, salePrice, quantity,quantityInStock) VALUES (?, ?,?, ?, ?, ?, ?, ?, ?); ");
+				pst2 = con.prepareStatement("INSERT INTO inbound_product (logNo, productId, purchasePrice, batchNo, mfgDate, expDate, quantityRecieved,quantityInStock) VALUES (?, ?,?, ?, ?, ?, ?, ?); ");
 				for(int i=0; i<numberOfElements; i++) {
 					//saving the in bound list to database
 					pst2.setInt(1, logNo);
@@ -86,12 +86,9 @@ public class InboundProductList {
 					pst2.setInt(4, productList.get(i).getBatchNo());
 					pst2.setDate(5, productList.get(i).getMfgDate());
 					pst2.setDate(6, productList.get(i).getExpDate());
-					pst2.setDouble(7, productList.get(i).getSalePrice());
+					pst2.setInt(7, productList.get(i).getQuantityIn());
 					pst2.setInt(8, productList.get(i).getQuantityIn());
-					pst2.setInt(9, productList.get(i).getQuantityIn());
 					pst2.execute();
-					//updating the product quantity in database table product
-					productList.get(i).updateQuantity();
 				}
 				
 			}

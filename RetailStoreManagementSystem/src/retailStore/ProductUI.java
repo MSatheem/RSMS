@@ -31,6 +31,7 @@ public class ProductUI extends JPanel {
 	 */
 	public ProductUI() {
 		setLayout(null);
+		setBounds(1, 1, 1000, 700);
 		
 		JPanel addEditCustomer_1 = new JPanel();
 		addEditCustomer_1.setLayout(null);
