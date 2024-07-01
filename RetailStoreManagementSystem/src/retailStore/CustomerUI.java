@@ -51,11 +51,11 @@ public class CustomerUI extends JPanel {
 	 */
 	public CustomerUI() {
 		setLayout(null);
-		setBounds(0,0,812,736);
+		setBounds(0,0,1000,700);
 		
 		JPanel addEditCustomer = new JPanel();
 		addEditCustomer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		addEditCustomer.setBounds(181, 88, 450, 440);
+		addEditCustomer.setBounds(275, 88, 450, 440);
 		add(addEditCustomer);
 		addEditCustomer.setLayout(null);
 		
@@ -169,11 +169,11 @@ public class CustomerUI extends JPanel {
 		
 		JLabel lblNewLabel_1 = new JLabel("Customer");
 		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 20));
-		lblNewLabel_1.setBounds(360, 32, 92, 24);
+		lblNewLabel_1.setBounds(454, 32, 92, 24);
 		add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 560, 792, 144);
+		scrollPane.setBounds(104, 546, 792, 144);
 		add(scrollPane);
 		
 		table = new JTable();

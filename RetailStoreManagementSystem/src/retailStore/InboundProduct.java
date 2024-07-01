@@ -17,7 +17,6 @@ public class InboundProduct extends Product{
 	
 	public InboundProduct(int id) {
 		Product product = new Product().getProductInfo(id);
-		this.setInStock(product.getInStock());
 		this.setId(id);
 		this.setName(product.getName());
 	}
@@ -61,18 +60,16 @@ public class InboundProduct extends Product{
 	public void setQuantityIn(int quantityIn) {
 		this.quantityIn = quantityIn;
 	}
-
+	/*
 	public void updateQuantity() {
-		connectToDatabase();
 		PreparedStatement pst;
 		try {
-			pst = con.prepareStatement("UPDATE product SET inStock = ? WHERE id = ?");
-			pst.setInt(1, this.getInStock()+quantityIn);
+			pst = DataBaseConnection.con.prepareStatement("UPDATE product SET inStock = ? WHERE id = ?");
 			pst.setInt(2, this.getId());
 			pst.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
-	}	
+	}*/	
 	
 }

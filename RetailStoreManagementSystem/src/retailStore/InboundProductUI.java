@@ -46,7 +46,7 @@ public class InboundProductUI extends JPanel {
 	}
 	
 	private void populateSupplier() {
-		supplier = new Supplier().getSupplierList();
+		supplier = new Supplier().getAllSuppliers();
 		String[] dataIn = new String[supplier.length];
 		for(int i=0; i<supplier.length; i++) {
 			dataIn[i] =  String.valueOf(supplier[i].getId()) + " " + supplier[i].getName() ;
@@ -72,6 +72,8 @@ public class InboundProductUI extends JPanel {
 	 */
 	public InboundProductUI() {
 		setLayout(null);
+		setBounds(1, 1, 1000, 700);
+		
 		productList = new InboundProductList();
 		
 		
@@ -101,15 +103,14 @@ public class InboundProductUI extends JPanel {
 					e1.printStackTrace();
 				}catch (NullPointerException e2) {
 					System.out.println(e2);
-					//e2.printStackTrace();
 				}
 			}
 		});
-		Add.setBounds(533, 315, 107, 35);
+		Add.setBounds(702, 303, 107, 35);
 		add(Add);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(92, 391, 618, 216);
+		scrollPane.setBounds(191, 391, 618, 216);
 		add(scrollPane);
 		
 		table = new JTable();
@@ -124,77 +125,77 @@ public class InboundProductUI extends JPanel {
 				}
 			}
 		});
-		cbSupplier.setBounds(160, 79, 166, 21);
+		cbSupplier.setBounds(361, 79, 166, 21);
 		add(cbSupplier);
 		
 		JLabel lblNewLabel = new JLabel("Supplier");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblNewLabel.setBounds(46, 68, 104, 35);
+		lblNewLabel.setBounds(191, 68, 104, 35);
 		add(lblNewLabel);
 		
 		lblNewLabel_1 = new JLabel("Product Inbound");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblNewLabel_1.setBounds(303, 20, 196, 35);
+		lblNewLabel_1.setBounds(402, 20, 196, 35);
 		add(lblNewLabel_1);
 		
 		lblProductId = new JLabel("Product Id");
 		lblProductId.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblProductId.setBounds(46, 110, 104, 35);
+		lblProductId.setBounds(191, 110, 104, 35);
 		add(lblProductId);
 		
 		lblPurchasePrice = new JLabel("Purchase Price");
 		lblPurchasePrice.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblPurchasePrice.setBounds(46, 171, 136, 35);
+		lblPurchasePrice.setBounds(191, 165, 136, 35);
 		add(lblPurchasePrice);
 		
 		tfPurchasePrice = new JTextField();
 		tfPurchasePrice.setColumns(10);
-		tfPurchasePrice.setBounds(192, 171, 111, 31);
+		tfPurchasePrice.setBounds(361, 171, 111, 31);
 		add(tfPurchasePrice);
 		
 		lblBatchNo = new JLabel("Batch No");
 		lblBatchNo.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblBatchNo.setBounds(391, 171, 136, 35);
+		lblBatchNo.setBounds(515, 165, 136, 35);
 		add(lblBatchNo);
 		
 		tfBatchNo = new JTextField();
 		tfBatchNo.setColumns(10);
-		tfBatchNo.setBounds(558, 171, 111, 31);
+		tfBatchNo.setBounds(698, 171, 111, 31);
 		add(tfBatchNo);
 		
 		lblExpirydate = new JLabel("Mfg Date");
 		lblExpirydate.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblExpirydate.setBounds(46, 239, 136, 35);
+		lblExpirydate.setBounds(191, 239, 136, 35);
 		add(lblExpirydate);
 		
 		dateChooserMfg = new JDateChooser();
 		dateChooserMfg.setDateFormatString("yyyy/MM/dd");
-		dateChooserMfg.setBounds(192, 239, 136, 35);
+		dateChooserMfg.setBounds(361, 239, 136, 35);
 		add(dateChooserMfg);
 		
 		JLabel lblExpiryDate = new JLabel("Expiry Date");
 		lblExpiryDate.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblExpiryDate.setBounds(391, 239, 136, 35);
+		lblExpiryDate.setBounds(515, 239, 136, 35);
 		add(lblExpiryDate);
 		
 		dateChooserExp = new JDateChooser();
 		dateChooserExp.setDateFormatString("yyyy/MM/dd");
-		dateChooserExp.setBounds(533, 239, 136, 35);
+		dateChooserExp.setBounds(673, 239, 136, 35);
 		add(dateChooserExp);
 		
 		lblExpirydate_1 = new JLabel("Quantity");
 		lblExpirydate_1.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblExpirydate_1.setBounds(46, 302, 136, 35);
+		lblExpirydate_1.setBounds(191, 299, 136, 35);
 		add(lblExpirydate_1);
 		
 		tfQuantity = new JTextField();
 		tfQuantity.setColumns(10);
-		tfQuantity.setBounds(192, 314, 107, 19);
+		tfQuantity.setBounds(361, 315, 107, 19);
 		add(tfQuantity);
 		
 		cbProduct = new JComboBox<String>();
 		cbProduct.setSelectedIndex(-1);
-		cbProduct.setBounds(160, 121, 166, 21);
+		cbProduct.setBounds(361, 121, 166, 21);
 		add(cbProduct);
 		
 		JButton Save = new JButton("Save");
@@ -204,7 +205,7 @@ public class InboundProductUI extends JPanel {
 			}
 		});
 		Save.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		Save.setBounds(562, 643, 107, 35);
+		Save.setBounds(702, 655, 107, 35);
 		add(Save);
 		populateSupplier();
 		
