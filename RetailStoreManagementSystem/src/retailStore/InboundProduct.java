@@ -1,9 +1,6 @@
 package retailStore;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 public class InboundProduct extends Product{
 
 	private double purchasePrice;
@@ -69,16 +66,6 @@ public class InboundProduct extends Product{
 	public void setQuantityIn(int quantityIn) {
 		this.quantityIn = quantityIn;
 	}
-	/*
-	public void updateQuantity() {
-		PreparedStatement pst;
-		try {
-			pst = DataBaseConnection.con.prepareStatement("UPDATE product SET inStock = ? WHERE id = ?");
-			pst.setInt(2, this.getId());
-			pst.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
-	}*/	
+	
 	
 }

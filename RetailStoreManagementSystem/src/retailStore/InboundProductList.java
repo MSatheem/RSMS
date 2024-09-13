@@ -78,7 +78,7 @@ public class InboundProductList {
 		try {
 			pst = con.prepareStatement("INSERT INTO inbound(date,supplierId) VALUES(?,?)");
 			pst.setDate(1, dateToSave);
-			pst.setInt(2, 1);
+			pst.setInt(2, supplierId);
 			pst.execute();
 			
 			pst = con.prepareStatement("SELECT LAST_INSERT_ID();");
