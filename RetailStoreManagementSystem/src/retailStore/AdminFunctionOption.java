@@ -22,6 +22,7 @@ public class AdminFunctionOption extends JPanel {
 	private InboundProductUI inboundProductUI;
 	private SupplierUpdateUI supplierUpdateUI;
 	private CustomerUI customerUI;
+	private StoreToShelfUI shelfUI;
 	/**
 	 * Create the panel.
 	 */
@@ -42,6 +43,7 @@ public class AdminFunctionOption extends JPanel {
 		inboundProductUI = new InboundProductUI();
 		supplierUpdateUI = new SupplierUpdateUI();
 		customerUI = new CustomerUI();
+		shelfUI = new StoreToShelfUI();
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -61,6 +63,16 @@ public class AdminFunctionOption extends JPanel {
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Return");
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		StoreMenu.add(mntmNewMenuItem_1);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Stock Shelf");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panel.add(shelfUI);
+				shelfUI.setVisible(true);
+				panel.setVisible(true);
+			}
+		});
+		StoreMenu.add(mntmNewMenuItem_3);
 		
 		JMenu CustomerMenu = new JMenu("Customer");
 		CustomerMenu.setHorizontalAlignment(SwingConstants.CENTER);

@@ -23,12 +23,13 @@ public class DataBaseConnection {
 	}
 	
 	//getting number of entries saved in database
-	static int getCount(String tableName) {
+	static int getCount(String tableName, String columnName) {
 		PreparedStatement pst;
 		ResultSet rst;
 
 		try {
-			pst = DataBaseConnection.con.prepareStatement("SELECT COUNT(id) FROM " + tableName);
+			pst = DataBaseConnection.con.prepareStatement("SELECT COUNT(?) FROM " + tableName);
+			pst.setString(1, columnName);
 			rst = pst.executeQuery();
 
 			if (rst.next()) {

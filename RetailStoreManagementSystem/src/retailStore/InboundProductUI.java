@@ -57,7 +57,6 @@ public class InboundProductUI extends JPanel {
 	}
 	
 	private void populateProduct(int supplierId) {
-		System.out.println(supplierId);
 		product = new Product().getAllProducts(supplierId);
 		String[] dataIn = new String[product.length];
 		for(int i=0; i<product.length; i++) {
@@ -66,6 +65,16 @@ public class InboundProductUI extends JPanel {
 		modelComboBox1 = new DefaultComboBoxModel<String>(dataIn);
 		cbProduct.setModel(modelComboBox1);
 		cbProduct.setSelectedIndex(-1);
+	}
+	
+	private void clearTable() {
+		productList = new InboundProductList();
+		populateTable();
+	}
+	
+	private void clearFields() {
+		cbSupplier.setSelectedIndex(-1);
+		populateProduct(0);
 	}
 	/**
 	 * Create the panel.
@@ -202,11 +211,23 @@ public class InboundProductUI extends JPanel {
 		Save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				productList.Save();
+				clearTable();
 			}
 		});
 		Save.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		Save.setBounds(702, 655, 107, 35);
 		add(Save);
+		
+		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearTable();
+				clearFields();
+			}
+		});
+		btnClear.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		btnClear.setBounds(571, 655, 107, 35);
+		add(btnClear);
 		populateSupplier();
 		
 		populateTable();

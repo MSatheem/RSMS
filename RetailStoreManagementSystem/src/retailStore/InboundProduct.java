@@ -1,9 +1,6 @@
 package retailStore;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 public class InboundProduct extends Product{
 
 	private double purchasePrice;
@@ -11,7 +8,8 @@ public class InboundProduct extends Product{
 	private int batchNo;
 	private Date mfgDate;
 	private Date expDate;
-	private int quantityIn;
+	private int quantityIn; //quantity received from supplier
+	private int quantityInStore; //quantity currently in store
 	public InboundProduct() {
 	}
 	
@@ -41,6 +39,14 @@ public class InboundProduct extends Product{
 		return quantityIn;
 	}
 	
+	public int getQuantityInStore() {
+		return quantityInStore;
+	}
+
+	public void setQuantityInStore(int quantityInStore) {
+		this.quantityInStore = quantityInStore;
+	}
+
 	//setters
 	public void setPurchasePrice(double purchasePrice) {
 		this.purchasePrice = purchasePrice;
@@ -60,16 +66,6 @@ public class InboundProduct extends Product{
 	public void setQuantityIn(int quantityIn) {
 		this.quantityIn = quantityIn;
 	}
-	/*
-	public void updateQuantity() {
-		PreparedStatement pst;
-		try {
-			pst = DataBaseConnection.con.prepareStatement("UPDATE product SET inStock = ? WHERE id = ?");
-			pst.setInt(2, this.getId());
-			pst.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
-	}*/	
+	
 	
 }
