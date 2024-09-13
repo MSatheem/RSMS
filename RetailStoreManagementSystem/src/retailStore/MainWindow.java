@@ -44,7 +44,7 @@ public class MainWindow {
 		frame.setBounds(0, 0, 1200, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		frame.setUndecorated(true);
+		//frame.setUndecorated(true);
 		
 		//starting xampp
 		XamppAuto.startXamppServer();
@@ -56,7 +56,8 @@ public class MainWindow {
 		JButton btnNewButton = new JButton("X");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				XamppAuto.closeXamppServer();
+				//closing xampp
+				//XamppAuto.closeXamppServer();
 				System.exit(0);
 			}
 		});

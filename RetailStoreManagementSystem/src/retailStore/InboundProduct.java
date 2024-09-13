@@ -11,7 +11,8 @@ public class InboundProduct extends Product{
 	private int batchNo;
 	private Date mfgDate;
 	private Date expDate;
-	private int quantityIn;
+	private int quantityIn; //quantity received from supplier
+	private int quantityInStore; //quantity currently in store
 	public InboundProduct() {
 	}
 	
@@ -41,6 +42,14 @@ public class InboundProduct extends Product{
 		return quantityIn;
 	}
 	
+	public int getQuantityInStore() {
+		return quantityInStore;
+	}
+
+	public void setQuantityInStore(int quantityInStore) {
+		this.quantityInStore = quantityInStore;
+	}
+
 	//setters
 	public void setPurchasePrice(double purchasePrice) {
 		this.purchasePrice = purchasePrice;

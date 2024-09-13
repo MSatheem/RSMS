@@ -16,8 +16,16 @@ public class InboundProductList {
 	private Date date = new Date();
 	private int supplierId;
 	
-	private int numberOfElements = 0;
+	private int numberOfInboundProducts = 0;
 	List<InboundProduct> productList = new ArrayList<InboundProduct>();
+
+	public int getLogNo() {
+		return logNo;
+	}
+
+	public void setLogNo(int logNo) {
+		this.logNo = logNo;
+	}
 
 	//getters
 	public Date getDate() {
@@ -39,17 +47,17 @@ public class InboundProductList {
 	
 	public void addtoList(InboundProduct product) {
 		productList.add(product);
-		numberOfElements++;
+		numberOfInboundProducts++;
 	}
 	
-	public int getNumberOfElements() {
-		return numberOfElements;
+	public int getNumberOfInboundProducts() {
+		return numberOfInboundProducts;
 	}
 
 	//2d array for table population
 	public Object[][] listToArray() {
-		Object productArray[][] = new Object[numberOfElements][7];
-		for(int i=0; i<numberOfElements; i++) {
+		Object productArray[][] = new Object[numberOfInboundProducts][7];
+		for(int i=0; i<numberOfInboundProducts; i++) {
 			productArray[i][0] = productList.get(i).getId();
 			productArray[i][1] = productList.get(i).getName();
 			productArray[i][2] = productList.get(i).getPurchasePrice();
@@ -78,7 +86,7 @@ public class InboundProductList {
 			if(rst.next()) {
 				logNo = rst.getInt(1);
 				pst2 = con.prepareStatement("INSERT INTO inbound_product (logNo, productId, purchasePrice, batchNo, mfgDate, expDate, quantityRecieved,quantityInStock) VALUES (?, ?,?, ?, ?, ?, ?, ?); ");
-				for(int i=0; i<numberOfElements; i++) {
+				for(int i=0; i<numberOfInboundProducts; i++) {
 					//saving the in bound list to database
 					pst2.setInt(1, logNo);
 					pst2.setInt(2, productList.get(i).getId());
@@ -96,6 +104,31 @@ public class InboundProductList {
 			e.printStackTrace();
 		}
 		closeConnection();
+	}
+	
+	public void retrieveInboundDetails() {
+		//date,logNo from inbound and poductId, purchasePrice,batchNo,mfgDate,expDate,quantityIOnstock from inbound product
+		connectToDatabase();
+		PreparedStatement pst;
+		ResultSet rst;
+		
+		try {
+			pst = con.prepareStatement("SELECT productId, purchasePrice, batchNo, mfgDate, expDate, quantityInStock from inbound_product WHERE logNo = ?");
+			pst.setInt(1, logNo);
+			rst = pst.executeQuery();
+			while(rst.next()) {//not empty
+				InboundProduct product = new InboundProduct(rst.getInt(1));
+				product.setPurchasePrice(rst.getDouble(2));
+				product.setBatchNo(rst.getInt(3));
+				product.setMfgDate(rst.getDate(4));
+				product.setExpDate(rst.getDate(5));
+				product.setQuantityInStore(rst.getInt(6));
+				productList.add(product);
+				numberOfInboundProducts++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//establishing connection to database
@@ -119,4 +152,3 @@ public class InboundProductList {
 			}
 		}
 }
- 

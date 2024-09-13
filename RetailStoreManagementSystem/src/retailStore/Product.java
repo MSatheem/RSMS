@@ -153,7 +153,7 @@ public class Product {
 	
 	// getting number of product saved
 	public int getProductCount() {
-		return DataBaseConnection.getCount("product");
+		return DataBaseConnection.getCount("product","id");
 	}
 	
 	public int getProductCount(int supplierId) {

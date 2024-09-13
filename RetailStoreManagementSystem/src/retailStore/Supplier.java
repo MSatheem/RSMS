@@ -120,13 +120,14 @@ public class Supplier {
 		PreparedStatement pst;
 
 		try {
-			pst = DataBaseConnection.con.prepareStatement("INSERT INTO supplier (id, name, address, email, contactNumber, contactPerson) VALUES (?, ?, ?, ?, ?, ?) ");
-			pst.setInt(1, this.id);
-			pst.setString(2, this.name);
-			pst.setString(3, this.address);
-			pst.setString(4, this.email);
-			pst.setInt(5, this.contactNumber);
-			pst.setString(6, this.contactPerson);
+			pst = DataBaseConnection.con.prepareStatement("UPDATE supplier SET name = ?, address = ?, email = ?, contactNumber = ?, contactPerson = ? WHERE id = ?");
+			
+			pst.setString(1, this.name);
+			pst.setString(2, this.address);
+			pst.setString(3, this.email);
+			pst.setInt(4, this.contactNumber);
+			pst.setString(5, this.contactPerson);
+			pst.setInt(6, this.id);
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
@@ -203,7 +204,7 @@ public class Supplier {
 	}
 	// getting number of suppliers saved
 	public int getSupplierCount() {
-		return DataBaseConnection.getCount("supplier");
+		return DataBaseConnection.getCount("supplier","id");
 	}
 
 	public boolean isSaved() {

@@ -5,6 +5,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -20,6 +22,7 @@ import javax.swing.JTable;
 public class SupplierUpdateUI extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	JPanel panelTextFields;
 	private JTextField tfName;
 	private JTextField tfAddress;
 	private JTextField tfPhoneNo;
@@ -46,6 +49,13 @@ public class SupplierUpdateUI extends JPanel {
 		table.getColumnModel().getColumn(0).setPreferredWidth(5);
 		table.getColumnModel().getColumn(4).setPreferredWidth(20);
 		
+	}
+	
+	private void disableTextFields(boolean isEnabled) {
+		Component[] component = panelTextFields.getComponents();
+		for(Component comp : component) {
+			comp.setEnabled(isEnabled);
+		}
 	}
 	
 	
@@ -82,57 +92,37 @@ public class SupplierUpdateUI extends JPanel {
 		lblEmail.setBounds(10, 201, 105, 24);
 		addEditCustomer.add(lblEmail);
 		
-		tfName = new JTextField();
-		tfName.setFont(new Font("Arial", Font.BOLD, 20));
-		tfName.setColumns(10);
-		tfName.setBounds(205, 30, 295, 30);
-		addEditCustomer.add(tfName);
-		
-		tfAddress = new JTextField();
-		tfAddress.setFont(new Font("Arial", Font.BOLD, 20));
-		tfAddress.setColumns(10);
-		tfAddress.setBounds(205, 88, 295, 30);
-		addEditCustomer.add(tfAddress);
-		
-		tfPhoneNo = new JTextField();
-		tfPhoneNo.setFont(new Font("Arial", Font.BOLD, 20));
-		tfPhoneNo.setColumns(10);
-		tfPhoneNo.setBounds(205, 151, 295, 30);
-		addEditCustomer.add(tfPhoneNo);
-		
-		tfEmail = new JTextField();
-		tfEmail.setFont(new Font("Arial", Font.BOLD, 20));
-		tfEmail.setColumns(10);
-		tfEmail.setBounds(205, 208, 295, 30);
-		addEditCustomer.add(tfEmail);
-		
-		JPanel panel = new JPanel();
-		panel.setLayout(null);
-		panel.setBounds(205, 329, 295, 62);
-		addEditCustomer.add(panel);
+		JPanel panelBtn = new JPanel();
+		panelBtn.setLayout(null);
+		panelBtn.setBounds(205, 329, 295, 62);
+		addEditCustomer.add(panelBtn);
 		
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(ComponentChecker.isFieldsEmpty(panelTextFields)) {
+					String name = tfName.getText();
+					String address = tfAddress.getText();
+					String contactPerson = tfContactPerson.getText();
+					int phoneNo = Integer.valueOf(tfPhoneNo.getText());
+					String email = tfEmail.getText();
+					Supplier supplier = new Supplier(name, address, email, phoneNo, contactPerson);
+					
+					JOptionPane.showConfirmDialog(btnUpdate, "Are you sure want to save " + supplier.toString());
+					
+					supplier.saveNewSupplier();
+					
+					clearFields();
+					populateTable();
+				} else {
+					System.out.println("Not empty");
+				}
 				
-				String name = tfName.getText();
-				String address = tfAddress.getText();
-				String contactPerson = tfContactPerson.getText();
-				int phoneNo = Integer.valueOf(tfPhoneNo.getText());
-				String email = tfEmail.getText();
-				Supplier supplier = new Supplier(name, address, email, phoneNo, contactPerson);
-				
-				JOptionPane.showConfirmDialog(btnUpdate, "Are you sure want to save " + supplier.toString());
-				
-				supplier.saveNewSupplier();
-				
-				clearFields();
-				populateTable();
-			}
+							}
 		});
 		btnUpdate.setFont(new Font("Arial", Font.BOLD, 20));
 		btnUpdate.setBounds(162, 14, 106, 33);
-		panel.add(btnUpdate);
+		panelBtn.add(btnUpdate);
 		
 		JButton btnClear = new JButton("Clear");
 		btnClear.addActionListener(new ActionListener() {
@@ -142,18 +132,47 @@ public class SupplierUpdateUI extends JPanel {
 		});
 		btnClear.setFont(new Font("Arial", Font.BOLD, 20));
 		btnClear.setBounds(27, 14, 99, 33);
-		panel.add(btnClear);
-		
-		tfContactPerson = new JTextField();
-		tfContactPerson.setFont(new Font("Arial", Font.BOLD, 20));
-		tfContactPerson.setColumns(10);
-		tfContactPerson.setBounds(205, 265, 295, 30);
-		addEditCustomer.add(tfContactPerson);
+		panelBtn.add(btnClear);
 		
 		JLabel lblContactPerson = new JLabel("Contact Person:");
 		lblContactPerson.setFont(new Font("Arial", Font.BOLD, 20));
 		lblContactPerson.setBounds(10, 258, 166, 24);
 		addEditCustomer.add(lblContactPerson);
+		
+		panelTextFields = new JPanel();
+		panelTextFields.setBounds(174, 1, 387, 319);
+		addEditCustomer.add(panelTextFields);
+		panelTextFields.setLayout(null);
+		
+		tfName = new JTextField();
+		tfName.setBounds(30, 28, 295, 30);
+		panelTextFields.add(tfName);
+		tfName.setFont(new Font("Arial", Font.BOLD, 20));
+		tfName.setColumns(10);
+		
+		tfAddress = new JTextField();
+		tfAddress.setBounds(30, 85, 295, 30);
+		panelTextFields.add(tfAddress);
+		tfAddress.setFont(new Font("Arial", Font.BOLD, 20));
+		tfAddress.setColumns(10);
+		
+		tfPhoneNo = new JTextField();
+		tfPhoneNo.setBounds(30, 142, 295, 30);
+		panelTextFields.add(tfPhoneNo);
+		tfPhoneNo.setFont(new Font("Arial", Font.BOLD, 20));
+		tfPhoneNo.setColumns(10);
+		
+		tfEmail = new JTextField();
+		tfEmail.setBounds(30, 199, 295, 30);
+		panelTextFields.add(tfEmail);
+		tfEmail.setFont(new Font("Arial", Font.BOLD, 20));
+		tfEmail.setColumns(10);
+		
+		tfContactPerson = new JTextField();
+		tfContactPerson.setBounds(30, 256, 295, 30);
+		panelTextFields.add(tfContactPerson);
+		tfContactPerson.setFont(new Font("Arial", Font.BOLD, 20));
+		tfContactPerson.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Supplier");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -161,13 +180,14 @@ public class SupplierUpdateUI extends JPanel {
 		add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(203, 541, 660, 110);
+		scrollPane.setBounds(170, 541, 660, 110);
 		add(scrollPane);
 		
 		table = new JTable();
+		table.setColumnSelectionAllowed(true);
 		table.setEnabled(false);
 		scrollPane.setViewportView(table);
-		
+		disableTextFields(false);
 		populateTable();
 		
 	}
