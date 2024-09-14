@@ -11,16 +11,12 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 
 @SuppressWarnings("serial")
 public class CustomerListTable extends JPanel {
 	private static JTable table;
 	static String product[][];
 	private JTextField textFieldSearch;
-	@SuppressWarnings("rawtypes")
-	private JComboBox comboBox;
 	CustomerList customerList = new CustomerList();
 	
 	public void populateTable(Object[][] obj) {
@@ -46,7 +42,6 @@ public class CustomerListTable extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public CustomerListTable() {
 		setLayout(null);
 		setBounds(0, 0, 319, 325);
@@ -62,17 +57,17 @@ public class CustomerListTable extends JPanel {
 		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		scrollPane.setViewportView(table);
 
-		JLabel lblNewLabel = new JLabel("Search");
+		JLabel lblNewLabel = new JLabel("Search Phone Number");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblNewLabel.setBounds(10, 15, 72, 24);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel.setBounds(10, 15, 165, 24);
 		add(lblNewLabel);
 
 		textFieldSearch =  new JTextField();
 		textFieldSearch.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (textFieldSearch.getText().isEmpty() || comboBox.getSelectedIndex() == -1) {
+				if (textFieldSearch.getText().isEmpty()) {
 					populateTable();
 				} else {
 					customerList.customerInfo(Integer.parseInt(textFieldSearch.getText()));
@@ -83,12 +78,6 @@ public class CustomerListTable extends JPanel {
 		textFieldSearch.setBounds(185, 15, 124, 30);
 		add(textFieldSearch);
 		textFieldSearch.setColumns(10);
-
-		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Id", "ContacNo"}));
-		comboBox.setBounds(80, 19, 84, 21);
-		add(comboBox);
-		comboBox.setSelectedIndex(0);
 		populateTable();
 	}
 }
