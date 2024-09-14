@@ -28,7 +28,7 @@ public class Customer {
 		this.id = id;
 	}
 	
-	
+
 	public Customer(int id, String name, String address) {
 		super();
 		this.id = id;
@@ -215,15 +215,15 @@ public class Customer {
 		ResultSet rst;
 		
 		try {
-			pst = con.prepareStatement("SELECT name,address,city,contactNumber,email,dateJoined FROM customer WHERE id =?");
+			pst = DataBaseConnection.con.prepareStatement("SELECT name,address,city,contactNumber,email,dateJoined FROM customer WHERE id =?");
 			pst.setInt(1, id);
 			rst = pst.executeQuery();
 			if(rst.next()) {
-				this.name = rst.getString(1);
-				this.address = rst.getString(2);
-				this.city = rst.getString(3);
-				this.contactNumber = rst.getInt(4);
-				this.email = rst.getString(5);
+				customer.name = rst.getString(1);
+				customer.address = rst.getString(2);
+				customer.city = rst.getString(3);
+				customer.contactNumber = rst.getInt(4);
+				customer.email = rst.getString(5);
 				//this.joiningDate = rst.getString(6);
 				return customer;
 			}
