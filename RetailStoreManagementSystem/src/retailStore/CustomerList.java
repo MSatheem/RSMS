@@ -16,7 +16,6 @@ public class CustomerList {
 		customerDetailList.clear();
 		try {
 			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT id FROM customer WHERE contactNumber LIKE '%"+searchKey+"%'");
-			System.out.println(pst);
 			ResultSet rst = pst.executeQuery();
 			while (rst.next()) {
 				Customer customer = new Customer().getCustomerDetails(rst.getInt(1));
