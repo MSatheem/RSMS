@@ -27,6 +27,17 @@ public class AdminFunctionOption extends JPanel {
 	/**
 	 * Create the panel.
 	 */
+	private void menuSwitch() {
+		supplierUI = null;
+		productUI = null;
+		inboundProductUI = null;
+		supplierUpdateUI = null;
+		customerUI = null;
+		shelfUI = null;
+		invoiceUI = null;
+		panel.removeAll();
+		panel.setVisible(false);
+	}
 	
 	public AdminFunctionOption() {
 		setBackground(new Color(255, 255, 255));
@@ -38,13 +49,6 @@ public class AdminFunctionOption extends JPanel {
 		add(panel);
 		panel.setLayout(null);
 		panel.setVisible(false);
-		
-		supplierUI = new SupplierUI();
-		productUI = new ProductUI();
-		inboundProductUI = new InboundProductUI();
-		supplierUpdateUI = new SupplierUpdateUI();
-		customerUI = new CustomerUI();
-		shelfUI = new StoreToShelfUI();
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -59,6 +63,7 @@ public class AdminFunctionOption extends JPanel {
 		JMenuItem mntmNewMenuItem = new JMenuItem("Sales");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
 				invoiceUI =  new InvoiceUI();
 				panel.add(invoiceUI);
 				panel.setVisible(true);
@@ -75,8 +80,9 @@ public class AdminFunctionOption extends JPanel {
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Stock Shelf");
 		mntmNewMenuItem_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				shelfUI = new StoreToShelfUI();
 				panel.add(shelfUI);
-				shelfUI.setVisible(true);
 				panel.setVisible(true);
 			}
 		});
@@ -90,8 +96,9 @@ public class AdminFunctionOption extends JPanel {
 		JMenuItem mntmAdd = new JMenuItem("Add");
 		mntmAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				customerUI = new CustomerUI();
 				panel.add(customerUI);
-				customerUI.setVisible(true);
 				panel.setVisible(true);
 			}
 		});
@@ -111,8 +118,9 @@ public class AdminFunctionOption extends JPanel {
 		JMenuItem mntmNewMenuItem_1_2 = new JMenuItem("Inbound");
 		mntmNewMenuItem_1_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				inboundProductUI = new InboundProductUI();
 				panel.add(inboundProductUI);
-				inboundProductUI.setVisible(true);
 				panel.setVisible(true);
 			}
 		});
@@ -132,8 +140,9 @@ public class AdminFunctionOption extends JPanel {
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Add");
 		mntmNewMenuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				productUI = new ProductUI();
 				panel.add(productUI);
-				productUI.setVisible(true);
 				panel.setVisible(true);
 			}
 		});
@@ -153,8 +162,9 @@ public class AdminFunctionOption extends JPanel {
 		JMenuItem mntmAddSupplier = new JMenuItem("Add");
 		mntmAddSupplier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				supplierUI = new SupplierUI();
 				panel.add(supplierUI);
-				supplierUI.setVisible(true);
 				panel.setVisible(true);
 			}
 		});
@@ -165,8 +175,8 @@ public class AdminFunctionOption extends JPanel {
 		JMenuItem mntmNewMenuItem_1_4 = new JMenuItem("Edit");
 		mntmNewMenuItem_1_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				supplierUpdateUI = new SupplierUpdateUI();
 				panel.add(supplierUpdateUI);
-				supplierUpdateUI.setVisible(true);
 				panel.setVisible(true);
 			}
 		});
