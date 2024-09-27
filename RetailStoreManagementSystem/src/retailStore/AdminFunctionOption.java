@@ -185,6 +185,7 @@ public class AdminFunctionOption extends JPanel {
 		JMenuItem mntmNewMenuItem_1_4 = new JMenuItem("Edit");
 		mntmNewMenuItem_1_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
 				supplierUpdateUI = new SupplierUpdateUI();
 				panel.add(supplierUpdateUI);
 				panel.setVisible(true);
@@ -192,6 +193,13 @@ public class AdminFunctionOption extends JPanel {
 		});
 		mntmNewMenuItem_1_4.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		mnSupplier.add(mntmNewMenuItem_1_4);
+		
+		JMenu mnReport = new JMenu("Report");
+		mnReport.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		menuBar.add(mnReport);
+		
+		JMenuItem menuItem = new JMenuItem("New menu item");
+		mnReport.add(menuItem);
 		
 	}
 }
