@@ -179,6 +179,7 @@ public class InvoiceUI extends JPanel {
 		add(scrollPane_1);
 		
 		tableInvoice = new JTable();
+		tableInvoice.setEnabled(false);
 		scrollPane_1.setViewportView(tableInvoice);
 		
 		JLabel lblNewLabel_1 = new JLabel("Total");

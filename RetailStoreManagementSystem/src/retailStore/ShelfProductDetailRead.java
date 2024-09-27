@@ -1,8 +1,5 @@
 package retailStore;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 public class ShelfProductDetailRead extends ShelfProduct{
 	private int logNo;
 

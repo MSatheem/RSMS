@@ -24,6 +24,7 @@ public class AdminFunctionOption extends JPanel {
 	private CustomerUI customerUI;
 	private StoreToShelfUI shelfUI;
 	private InvoiceUI invoiceUI;
+	private ReturnProductUI returnProductUI;
 	/**
 	 * Create the panel.
 	 */
@@ -35,6 +36,7 @@ public class AdminFunctionOption extends JPanel {
 		customerUI = null;
 		shelfUI = null;
 		invoiceUI = null;
+		returnProductUI = null;
 		panel.removeAll();
 		panel.setVisible(false);
 	}
@@ -74,6 +76,14 @@ public class AdminFunctionOption extends JPanel {
 		StoreMenu.add(mntmNewMenuItem);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Return");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				returnProductUI = new ReturnProductUI();
+				panel.add(returnProductUI);
+				panel.setVisible(true);
+			}
+		});
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		StoreMenu.add(mntmNewMenuItem_1);
 		
@@ -175,6 +185,7 @@ public class AdminFunctionOption extends JPanel {
 		JMenuItem mntmNewMenuItem_1_4 = new JMenuItem("Edit");
 		mntmNewMenuItem_1_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
 				supplierUpdateUI = new SupplierUpdateUI();
 				panel.add(supplierUpdateUI);
 				panel.setVisible(true);
@@ -182,6 +193,13 @@ public class AdminFunctionOption extends JPanel {
 		});
 		mntmNewMenuItem_1_4.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		mnSupplier.add(mntmNewMenuItem_1_4);
+		
+		JMenu mnReport = new JMenu("Report");
+		mnReport.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		menuBar.add(mnReport);
+		
+		JMenuItem menuItem = new JMenuItem("New menu item");
+		mnReport.add(menuItem);
 		
 	}
 }
