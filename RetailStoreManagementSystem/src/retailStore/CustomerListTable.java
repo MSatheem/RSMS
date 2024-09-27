@@ -11,6 +11,9 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class CustomerListTable extends JPanel {
@@ -18,6 +21,7 @@ public class CustomerListTable extends JPanel {
 	static String product[][];
 	private JTextField textFieldSearch;
 	CustomerList customerList = new CustomerList();
+	private JButton btnNewButton;
 	
 	public void populateTable(Object[][] obj) {
 		String cName[] = { "ID", "Name", "ContactNo" };
@@ -48,10 +52,11 @@ public class CustomerListTable extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(10, 54, 299, 251);
+		scrollPane.setBounds(10, 54, 299, 206);
 		add(scrollPane);
 
 		table = new JTable();
+		table.setEnabled(false);
 		table.setCellSelectionEnabled(true);
 		table.setColumnSelectionAllowed(true);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -78,6 +83,15 @@ public class CustomerListTable extends JPanel {
 		textFieldSearch.setBounds(185, 15, 124, 30);
 		add(textFieldSearch);
 		textFieldSearch.setColumns(10);
+		
+		btnNewButton = new JButton("Select");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			 //getting the selected customer id and display it
+			}
+		});
+		btnNewButton.setBounds(224, 280, 85, 21);
+		add(btnNewButton);
 		populateTable();
 	}
 }
