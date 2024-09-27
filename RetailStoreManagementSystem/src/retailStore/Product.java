@@ -79,6 +79,8 @@ public class Product {
 				product.name = rst.getString(1);
 				product.supplierId = rst.getInt(2);
 				return product;
+			} else { //empty result
+				return null;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

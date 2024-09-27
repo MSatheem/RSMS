@@ -50,7 +50,7 @@ public class ShelfProductList {
 			rst = pst.executeQuery();
 			if(rst.next()) {
 				logNo = rst.getInt(1);
-				pst2 = con.prepareStatement("INSERT INTO shelf_product (logNo, productId, batchNo,inboundLogNo,salePrice, quantity) VALUES (?, ?, ?, ?, ?, ?); ");
+				pst2 = con.prepareStatement("INSERT INTO shelf_product (logNo, productId, batchNo,inboundLogNo,salePrice, quantity, qunatityInShelf) VALUES (?, ?, ?, ?, ?, ?); ");
 				for(int i=0; i<count; i++) {
 					//saving the in bound list to database
 					pst2.setInt(1, logNo);
@@ -59,7 +59,7 @@ public class ShelfProductList {
 					pst2.setInt(4, shelfList.get(i).getInboundLogNo());
 					pst2.setDouble(5, shelfList.get(i).getSalePrice());
 					pst2.setInt(6, shelfList.get(i).getQuantityMovedToShelf());
-					
+					pst2.setInt(7, shelfList.get(i).getQuantityMovedToShelf());
 					//updating quantity in in bound product table
 					shelfList.get(i).updateQuantity();
 					pst2.execute();
