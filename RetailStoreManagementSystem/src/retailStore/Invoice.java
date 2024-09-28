@@ -12,6 +12,7 @@ public class Invoice {
 	private Date date;
 	private double total = 0.00;
 	private int invoiceNumber;
+	private int numberOfProducts = 0;
 	
 	List<InvoiceProduct> invoiceProductList = new ArrayList<InvoiceProduct>();
 
@@ -33,6 +34,7 @@ public class Invoice {
 
 	public void add(InvoiceProduct invoiceProduct) {
 		setTotal(getTotal() + invoiceProduct.getTotalPrice());
+		setNumberOfProducts(getNumberOfProducts() + invoiceProduct.getQuantity()); 
 		invoiceProductList.add(invoiceProduct);
 	}
 	
@@ -114,7 +116,7 @@ public class Invoice {
 		}
 	}
 	
-	private void readInvoice() {
+	public void readInvoice() {
 		PreparedStatement pst,pst2;
 		ResultSet rst,rst2;
 		
@@ -125,7 +127,7 @@ public class Invoice {
 			rst = pst.executeQuery();
 			if(rst.next()) {
 				setDate(rst.getDate(2));
-				pst2 = DataBaseConnection.con.prepareStatement("SELECT productID, inboundLogNo, quantity, pricePerUnit, discount, batchNo FROM invoice_product WHERE billNumber = ?"); 
+				pst2 = DataBaseConnection.con.prepareStatement("SELECT productID, inboundLogNo, quantity, pricePerUnit, discount, batchNo, totalPrice FROM invoice_product WHERE billNumber = ?"); 
 				pst2.setInt(1, invoiceNumber);
 				rst2 = pst2.executeQuery();
 				while(rst2.next()) {
@@ -135,7 +137,8 @@ public class Invoice {
 					invoiceProduct.setPrice(rst2.getDouble(4));
 					invoiceProduct.setDiscount(rst2.getDouble(5));
 					invoiceProduct.setBatchNo(rst2.getInt(6));
-					invoiceProductList.add(invoiceProduct);
+					invoiceProduct.setTotalPrice(rst2.getDouble(7));
+					add(invoiceProduct);
 				}
 			}
 		} catch (SQLException e) {
@@ -168,4 +171,11 @@ public class Invoice {
 		this.invoiceNumber = invoiceNumber;
 	}
 
+	public int getNumberOfProducts() {
+		return numberOfProducts;
+	}
+
+	public void setNumberOfProducts(int numberOfProducts) {
+		this.numberOfProducts = numberOfProducts;
+	}
 }
