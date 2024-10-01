@@ -3,13 +3,9 @@ package retailStore;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.Color;
 import java.awt.Component;
-
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -18,6 +14,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SupplierUpdateUI extends JPanel {
 
@@ -30,6 +28,7 @@ public class SupplierUpdateUI extends JPanel {
 	private JTextField tfContactPerson;
 	private JTable table;
 	DefaultTableModel model;
+	Supplier supplier;
 	
 	private void clearFields() {
 		tfName.setText("");
@@ -37,6 +36,7 @@ public class SupplierUpdateUI extends JPanel {
 		tfPhoneNo.setText("");
 		tfEmail.setText("");
 		tfContactPerson.setText("");
+		supplier = null;
 	}
 	
 	private void populateTable() {
@@ -58,10 +58,19 @@ public class SupplierUpdateUI extends JPanel {
 		}
 	}
 	
+	private void populateTextFields(Supplier supplier) {
+		tfName.setText(supplier.getName());
+		tfAddress.setText(supplier.getAddress());
+		tfPhoneNo.setText(String.valueOf(supplier.getContactNumber()));
+		tfEmail.setText(String.valueOf(supplier.getEmail()));
+		tfContactPerson.setText(supplier.getContactPerson());
+		disableTextFields(true);
+	}
 	
 	/**
 	 * Create the panel.
 	 */
+	@SuppressWarnings("serial")
 	public SupplierUpdateUI() {
 		setLayout(null);
 		setBounds(1, 1, 1000, 700);
@@ -100,25 +109,19 @@ public class SupplierUpdateUI extends JPanel {
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(ComponentChecker.isFieldsEmpty(panelTextFields)) {
-					String name = tfName.getText();
-					String address = tfAddress.getText();
-					String contactPerson = tfContactPerson.getText();
-					int phoneNo = Integer.valueOf(tfPhoneNo.getText());
-					String email = tfEmail.getText();
-					Supplier supplier = new Supplier(name, address, email, phoneNo, contactPerson);
-					
-					JOptionPane.showConfirmDialog(btnUpdate, "Are you sure want to save " + supplier.toString());
-					
-					supplier.saveNewSupplier();
-					
+				if(!ComponentChecker.isFieldsEmpty(panelTextFields)) { //checking whether fields are empty
+					supplier.setName(tfName.getText());
+					supplier.setAddress(tfAddress.getText());
+					supplier.setContactPerson(tfContactPerson.getText());
+					supplier.setContactNumber(Integer.valueOf(tfPhoneNo.getText()));
+					supplier.setEmail(tfEmail.getText());
+					if(supplier.updateSupplier()) {
+						System.out.println("Updated");
+					}
 					clearFields();
 					populateTable();
-				} else {
-					System.out.println("Not empty");
 				}
-				
-							}
+			}
 		});
 		btnUpdate.setFont(new Font("Arial", Font.BOLD, 20));
 		btnUpdate.setBounds(162, 14, 106, 33);
@@ -180,12 +183,25 @@ public class SupplierUpdateUI extends JPanel {
 		add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(170, 541, 660, 110);
+		scrollPane.setBounds(106, 541, 787, 110);
 		add(scrollPane);
 		
-		table = new JTable();
-		table.setColumnSelectionAllowed(true);
-		table.setEnabled(false);
+		table = new JTable() {
+			public  boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		table.addMouseListener(new MouseAdapter() {
+			@Override 
+			public void mouseClicked(MouseEvent e) {
+				supplier = new Supplier();
+				int rowSelected = table.getSelectedRow();
+				int id = Integer.parseInt(String.valueOf(table.getValueAt(rowSelected, 0)));
+				supplier.setId(id);
+				supplier = supplier.getSuppilerDetail();
+				populateTextFields(supplier);
+			}
+		});
 		scrollPane.setViewportView(table);
 		disableTextFields(false);
 		populateTable();
