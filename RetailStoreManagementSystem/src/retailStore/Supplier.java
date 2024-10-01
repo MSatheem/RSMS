@@ -223,4 +223,23 @@ public class Supplier {
 		}
 		return false;
 	}
+	
+	public boolean updateSupplier() {
+		PreparedStatement pst;
+		
+		try {
+			pst = DataBaseConnection.con.prepareStatement("UPDATE supplier SET name = ?,  address = ?, email = ?, contactNumber = ?, contactPerson = ? WHERE id = ? ");
+			pst.setString(1, name);
+			pst.setString(2, address);
+			pst.setString(3, email);
+			pst.setInt(4, contactNumber);
+			pst.setString(5, contactPerson);
+			pst.setInt(6, id);
+			pst.execute();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }
