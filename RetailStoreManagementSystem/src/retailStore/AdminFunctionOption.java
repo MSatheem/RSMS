@@ -26,6 +26,7 @@ public class AdminFunctionOption extends JPanel {
 	private InvoiceUI invoiceUI;
 	private ReturnProductUI returnProductUI;
 	private SalesReportUI salesReportUI;
+	private ProductUpdateUI productUpdateUI;
 	/**
 	 * Create the panel.
 	 */
@@ -39,6 +40,7 @@ public class AdminFunctionOption extends JPanel {
 		invoiceUI = null;
 		returnProductUI = null;
 		salesReportUI = null;
+		productUpdateUI = null;
 		panel.removeAll();
 		panel.setVisible(false);
 	}
@@ -163,6 +165,14 @@ public class AdminFunctionOption extends JPanel {
 		mnProduct.add(mntmNewMenuItem_2);
 		
 		JMenuItem mntmNewMenuItem_1_3 = new JMenuItem("Edit");
+		mntmNewMenuItem_1_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				productUpdateUI = new ProductUpdateUI();
+				panel.add(productUpdateUI);
+				panel.setVisible(true);
+			}
+		});
 		mntmNewMenuItem_1_3.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		mnProduct.add(mntmNewMenuItem_1_3);
 		
