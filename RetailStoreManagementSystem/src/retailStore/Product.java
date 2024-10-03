@@ -144,7 +144,7 @@ public class Product {
 	// 2d object Array for table population
 	public Object[][] populateProductTable() {
 		Product product[] = getAllProducts();
-		Object objects[][] = new Object[getProductCount()][3];
+		Object objects[][] = new Object[getProductCount()][4];
 		for (int i = 0; i < getProductCount(); i++) {
 			objects[i][0] = product[i].id;
 			objects[i][1] = product[i].name;
@@ -212,5 +212,19 @@ public class Product {
 			e.printStackTrace();
 		} 
 		return -1;
+	}
+	
+	public void update() {
+		PreparedStatement pst;
+		
+		try {
+			pst = DataBaseConnection.con.prepareStatement("UPDATE product SET name = ?, supplierId = ? WHERE id = ? ");
+			pst.setString(1, getName());
+			pst.setInt(2, getSupplierId());
+			pst.setInt(3, getId());
+			pst.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
