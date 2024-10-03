@@ -14,6 +14,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class ProductUpdateUI extends JPanel {
@@ -25,7 +27,7 @@ public class ProductUpdateUI extends JPanel {
 	private JTextField tfSupplierName;
 	private JTable table;
 	DefaultTableModel model;
-	
+	Product product;
 	private void clearFields() {
 		tfProductName.setText("");
 		tfSupplierId.setText("");
@@ -34,17 +36,46 @@ public class ProductUpdateUI extends JPanel {
 	
 	private void populateProductDetailTable() {
 		Product product = new Product();
-		String name[] = {"Id","Name","Address", "Email", "Phone","Contact Person"};
+		String name[] = {"Product Id","Name","SupplierId"};
 		
 		model = new DefaultTableModel(product.populateProductTable(), name);
 		table.setModel(model);
 
 		table.getColumnModel().getColumn(0).setPreferredWidth(5);
-		table.getColumnModel().getColumn(4).setPreferredWidth(20);
+		table.getColumnModel().getColumn(2).setPreferredWidth(20);
+	}
+	
+	private void populateFieldForEditing(Product product) {
+		tfProductName.setText(product.getName());
+		tfSupplierId.setText(String.valueOf(product.getSupplierId()));
+	}
+	
+	private void populateSupplierNameField() {
+		Supplier supplier = new Supplier();
+		int id;
+		
+		if(!tfSupplierId.getText().contentEquals("")) { //not empty
+			try { //number only allowed
+				id = Integer.valueOf(tfSupplierId.getText());
+				supplier.setId(id);
+				if(supplier.isSaved()) {
+					supplier = supplier.getSuppilerDetail();
+					tfSupplierName.setText(supplier.getName());
+				} else {
+					tfSupplierName.setText("");
+				}
+			} catch (NumberFormatException e1) {
+				tfSupplierName.setText("");
+				System.out.println(e1);
+			}	
+		} else {
+			tfSupplierName.setText("");
+		}
 	}
 	/**
 	 * Create the panel.
 	 */
+	@SuppressWarnings("serial")
 	public ProductUpdateUI() {
 		setLayout(null);
 		setBounds(1, 1, 1000, 700);
@@ -75,26 +106,7 @@ public class ProductUpdateUI extends JPanel {
 		tfSupplierId.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				Supplier supplier = new Supplier();
-				int id;
-				
-				if(!tfSupplierId.getText().contentEquals("")) { //not empty
-					try { //number only allowed
-						id = Integer.valueOf(tfSupplierId.getText());
-						supplier.setId(id);
-						if(supplier.isSaved()) {
-							supplier = supplier.getSuppilerDetail();
-							tfSupplierName.setText(supplier.getName());
-						} else {
-							tfSupplierName.setText("");
-						}
-					} catch (NumberFormatException e1) {
-						tfSupplierName.setText("");
-						System.out.println(e1);
-					}	
-				} else {
-					tfSupplierName.setText("");
-				}
+				populateSupplierNameField();
 			}
 		});
 		tfSupplierId.setFont(new Font("Arial", Font.BOLD, 20));
@@ -107,20 +119,22 @@ public class ProductUpdateUI extends JPanel {
 		panel_1.setBounds(122, 203, 295, 62);
 		addEditCustomer_1.add(panel_1);
 		
-		JButton btnNewButton_1 = new JButton("Save");
+		JButton btnNewButton_1 = new JButton("Update");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String productName = tfProductName.getText();
 				int id = Integer.valueOf(tfSupplierId.getText());
 				if(!tfSupplierName.getText().contentEquals("")) {
-					Product newProduct = new Product(productName, id);
+					product.setName(productName);
+					product.setSupplierId(id);
+					product.update();
+					populateProductDetailTable();
 					clearFields();
-					newProduct.saveProduct();
 				}
 			}
 		});
 		btnNewButton_1.setFont(new Font("Arial", Font.BOLD, 20));
-		btnNewButton_1.setBounds(169, 14, 83, 33);
+		btnNewButton_1.setBounds(143, 14, 124, 33);
 		panel_1.add(btnNewButton_1);
 		
 		JButton btnClear_1 = new JButton("Clear");
@@ -130,7 +144,7 @@ public class ProductUpdateUI extends JPanel {
 			}
 		});
 		btnClear_1.setFont(new Font("Arial", Font.BOLD, 20));
-		btnClear_1.setBounds(35, 14, 91, 33);
+		btnClear_1.setBounds(26, 14, 91, 33);
 		panel_1.add(btnClear_1);
 		
 		tfSupplierName = new JTextField();
@@ -148,7 +162,23 @@ public class ProductUpdateUI extends JPanel {
 		scrollPane.setBounds(92, 465, 815, 185);
 		add(scrollPane);
 		
-		table = new JTable();
+		table = new JTable() {
+			public  boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int tableRowSelected = table.getSelectedRow();
+				product = new Product();
+				int productId = Integer.valueOf(String.valueOf(table.getValueAt(tableRowSelected, 0)));
+				product.setId(productId);
+				product = product.getProductInfo(productId);
+				populateFieldForEditing(product);
+				populateSupplierNameField();
+			}
+		});
 		scrollPane.setViewportView(table);
 		populateProductDetailTable();
 
