@@ -1,71 +1,51 @@
 package retailStore;
 
-import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Employee {
 	private int id;
-	private int name;
+	private String name;
 	private String position;
+	private String email;
+	private String address;
+	private int conatactNumber;
 	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getName() {
-		return name;
-	}
-
-	public void setName(int name) {
-		this.name = name;
-	}
-
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
-
-	Connection con;
-	public Employee(int id, int name, String position) {
-		this.id = id;
+	public Employee(String name, String position, String email, String address, int conatactNumber) {
 		this.name = name;
 		this.position = position;
+		this.email = email;
+		this.address = address;
+		this.conatactNumber = conatactNumber;
 	}
-	
-	//saving employee
-	public void saveEmployee() {
-		
-	}
-	
-	public void employeeInfo() {
-		
-	}
-	/*
-	//establishing connection to database
-		private void connectToDatabase() {
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/rsms","root","");
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+
+	public void addNewEmployee() {
+		try {
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("INSERT INTO employee(name,contactNo,address,email,position) VALUES (?,?,?,?,?)");
+			pst.setString(1, name);
+			pst.setInt(2, conatactNumber);
+			pst.setString(3, address);
+			pst.setString(4, email);
+			pst.setString(5, position);
+			pst.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-
-		//closing connection to database
-		private void closeConnection() {
-			try {
-				con.close();
-				System.out.println("Connection closed");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}*/
+	}
+	
+	public void updateEmployee() {
+		try {
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("UPDATE users SET name = ?, contactNo = ?, address = ?, email = ?, position = ? WHERE id = ?");
+			pst.setString(1, name);
+			pst.setInt(2, conatactNumber);
+			pst.setString(3, address);
+			pst.setString(4, email);
+			pst.setString(5, position);
+			pst.setInt(6, id);
+			pst.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
+
