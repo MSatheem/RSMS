@@ -50,7 +50,7 @@ public class ShelfProductList {
 			rst = pst.executeQuery();
 			if(rst.next()) {
 				logNo = rst.getInt(1);
-				pst2 = con.prepareStatement("INSERT INTO shelf_product (logNo, productId, batchNo,inboundLogNo,salePrice, quantity, qunatityInShelf) VALUES (?, ?, ?, ?, ?, ?); ");
+				pst2 = con.prepareStatement("INSERT INTO shelf_product (logNo, productId, batchNo,inboundLogNo,salePrice, quantity, quantityInShelf) VALUES (?, ?, ?, ?, ?, ?,?) ");
 				for(int i=0; i<count; i++) {
 					//saving the in bound list to database
 					pst2.setInt(1, logNo);
