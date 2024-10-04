@@ -131,6 +131,7 @@ public class InboundProductUI extends JPanel {
 				int supplierIndexSelected = cbSupplier.getSelectedIndex();
 				if(supplierIndexSelected > -1) {
 					populateProduct(supplier[supplierIndexSelected].getId());
+					productList.setSupplierId(supplier[supplierIndexSelected].getId());
 				}
 			}
 		});

@@ -219,6 +219,7 @@ public class InvoiceUI extends JPanel {
 					invoiceProduct.setQuantity(Integer.parseInt(tfNumberOfProducts.getText()));
 					invoice.add(invoiceProduct);
 					tfTotalPrice.setText(String.valueOf(invoice.getTotal()));
+					invoiceProduct = null;
 				} catch (NumberFormatException | NullPointerException e1) {
 					e1.printStackTrace();
 				}
