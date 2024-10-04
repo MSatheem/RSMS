@@ -47,5 +47,9 @@ public class Employee {
 			e.printStackTrace();
 		}
 	}
+	
+	public String[][] populateTableArray() {
+		return null;
+	}
 }
 
