@@ -3,21 +3,27 @@ package retailStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Users {
-	private int userId;
+	private String userId;
 	private String userName;
 	private String password = "abcd@123" ; //defaultPassword
 	private int accessLevel = 0;
 	private boolean accessStatus = false;
 	private int wrongPasswordCount = 0;
 
-	public int getUserId() {
+	public Users(String userId, String password) {
+		this.userId = userId;
+		setPassword(password);
+	}
+	
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
@@ -27,11 +33,7 @@ public class Users {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public Users(int userId, String password) {
-		this.userId = userId;
-		this.password = password;
+		this.password = encryptedPassword();
 	}
 
 	public void addNewUser() {
@@ -47,8 +49,27 @@ public class Users {
 		}
 		
 	}
-
 	
+	public void login() {
+		if(userNameCheck()) { //checking whether userName exists
+			
+		}
+	}
+
+ 	private boolean userNameCheck() {
+		try {
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT COUNT(employeeId) FROM employee WHERE userName = ? ");
+			pst.setString(1, userName);
+			ResultSet rst = pst.executeQuery();
+			if(rst.next()) { //user name exists
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 
 	private void passwordCheck() {
 		

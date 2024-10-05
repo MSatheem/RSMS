@@ -10,11 +10,13 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class EmployeeUI extends JPanel {
+public class EmployeeUpdateUI extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField tfName;
@@ -22,8 +24,9 @@ public class EmployeeUI extends JPanel {
 	private JTextField tfPosition;
 	private JTextField tfPhoneNo;
 	private JTextField tfEmail;
-	private JTable table;
 	DefaultTableModel model;
+	private JTable table;
+	Employee employee;
 	
 	private void clearFields() {
 		tfName.setText("");
@@ -31,6 +34,7 @@ public class EmployeeUI extends JPanel {
 		tfPosition.setText("");
 		tfPhoneNo.setText("");
 		tfEmail.setText("");
+		employee = null;
 	}
 	
 	private void populateTable() {
@@ -40,11 +44,19 @@ public class EmployeeUI extends JPanel {
 		table.setModel(model);
 	}
 	
+	private void populateTextFields(Employee employee) {
+		tfName.setText(employee.getName());
+		tfAddress.setText(employee.getAddress());
+		tfPhoneNo.setText(String.valueOf(employee.getContactNumber()));
+		tfEmail.setText(String.valueOf(employee.getEmail()));
+		tfPosition.setText(employee.getPosition());
+	}
+	
 	/**
 	 * Create the panel.
 	 */
 	@SuppressWarnings("serial")
-	public EmployeeUI() {
+	public EmployeeUpdateUI() {
 		setLayout(null);
 		setBounds(0,0,1000,700);
 		
@@ -114,23 +126,25 @@ public class EmployeeUI extends JPanel {
 		addEditCustomer.add(panelSave);
 		panelSave.setLayout(null);
 		
-		JButton btnNewButton = new JButton("Save");
+		JButton btnNewButton = new JButton("Update");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(true) { //check componenets here
+					
+				}
 				//reading details from customer UI
-				String name = tfName.getText();
-				String address = tfAddress.getText();
-				String position = tfPosition.getText();
-				int phoneNo = Integer.parseInt(tfPhoneNo.getText());
-				String email = tfEmail.getText();
-				Employee employee = new Employee(name, position, email, address, phoneNo);
-				employee.addNewEmployee();
+				employee.setName(tfName.getText());
+				employee.setAddress(tfAddress.getText());
+				employee.setPosition(tfPosition.getText());
+				employee.setContactNumber(Integer.parseInt(tfPhoneNo.getText()));
+				employee.setEmail(tfEmail.getText());
+				employee.updateEmployee();
+				employee = null;
 				populateTable();
-				clearFields();
 			}
 		});
 		btnNewButton.setFont(new Font("Arial", Font.BOLD, 20));
-		btnNewButton.setBounds(169, 14, 83, 33);
+		btnNewButton.setBounds(169, 14, 99, 33);
 		panelSave.add(btnNewButton);
 		
 		JButton btnClear = new JButton("Clear");
@@ -143,14 +157,14 @@ public class EmployeeUI extends JPanel {
 		btnClear.setBounds(43, 14, 93, 33);
 		panelSave.add(btnClear);
 		
-		JLabel lblNewLabel_1 = new JLabel("Employee");
+		JLabel lblNewLabel_1 = new JLabel("Employee Update");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 20));
-		lblNewLabel_1.setBounds(440, 23, 119, 24);
+		lblNewLabel_1.setBounds(410, 23, 179, 24);
 		add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(104, 533, 792, 144);
+		scrollPane.setBounds(66, 549, 867, 130);
 		add(scrollPane);
 		
 		table = new JTable() {
@@ -158,9 +172,18 @@ public class EmployeeUI extends JPanel {
 				return false;
 			}
 		};
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				employee = new Employee();
+				int rowSelected = table.getSelectedRow();
+				int id = Integer.parseInt(String.valueOf(table.getValueAt(rowSelected, 0)));
+				employee.setId(id);
+				employee = employee.getEmployeeInfo();
+				populateTextFields(employee);
+			}
+		});
 		scrollPane.setViewportView(table);
 		populateTable();
-		
-
 	}
 }

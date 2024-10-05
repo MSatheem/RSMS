@@ -14,6 +14,7 @@ public class LoginUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField tfUserName;
 	private JPasswordField passwordField;
+	private Users user;
 	
 	public void clearFields() {
 		tfUserName.setText("");
@@ -48,6 +49,14 @@ public class LoginUI extends JPanel {
 		add(passwordField);
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String userName = tfUserName.getText();
+				@SuppressWarnings("deprecation")
+				String password = passwordField.getText();
+				user = new Users(userName, password);
+			}
+		});
 		btnLogin.setFont(new Font("Arial", Font.BOLD, 20));
 		btnLogin.setBounds(560, 321, 87, 33);
 		add(btnLogin);

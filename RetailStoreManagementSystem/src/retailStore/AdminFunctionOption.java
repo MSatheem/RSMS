@@ -28,6 +28,7 @@ public class AdminFunctionOption extends JPanel {
 	private SalesReportUI salesReportUI;
 	private ProductUpdateUI productUpdateUI;
 	private EmployeeUI employeeUI;
+	private EmployeeUpdateUI employeeUpdateUI;
 	/**
 	 * Create the panel.
 	 */
@@ -43,6 +44,7 @@ public class AdminFunctionOption extends JPanel {
 		salesReportUI = null;
 		productUpdateUI = null;
 		employeeUI = null;
+		employeeUpdateUI = null;
 		panel.removeAll();
 		panel.setVisible(false);
 	}
@@ -236,6 +238,17 @@ public class AdminFunctionOption extends JPanel {
 			}
 		});
 		mnEmployee.add(mntmAddEmployee);
+		
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Update");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				employeeUpdateUI = new EmployeeUpdateUI();
+				panel.add(employeeUpdateUI);
+				panel.setVisible(true);
+			}
+		});
+		mnEmployee.add(mntmNewMenuItem_4);
 		
 	}
 }
