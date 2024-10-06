@@ -5,6 +5,10 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.crypto.Data;
 
 public class Users {
 	private String userId;
@@ -19,16 +23,15 @@ public class Users {
 		setPassword(password);
 	}
 	
+	public Users() {
+	}
+
 	public String getUserId() {
 		return userId;
 	}
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	public String getPassword() {
-		return password;
 	}
 
 	public void setPassword(String password) {
@@ -52,6 +55,13 @@ public class Users {
 	
 	public void login() {
 		if(userNameCheck()) { //checking whether userName exists
+			if(accessStatusCheck()) {
+				if(passwordCheck()) { //password matches
+					
+				} else { //password no match
+					wrongPasswordCount = getWrongPasswordCount();
+				}
+			}
 			
 		}
 	}
@@ -71,20 +81,57 @@ public class Users {
 		return false;
 	}
 
-	private void passwordCheck() {
-		
+	
+	private boolean accessStatusCheck() {
+		try {
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT accessStatus FROM users WHERE userName = ?");
+			pst.setString(1, userName);
+			ResultSet rst = pst.executeQuery();
+			if(rst.next()) {
+				boolean status = rst.getBoolean(1);
+				return status;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
-
-	private void accessStatusCheck() {
-
+	
+	private int getWrongPasswordCount() {
+		try {
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT wrongPassword FROM employee Where username = ?");
+			pst.setString(1, userName);
+			
+			ResultSet rst = pst.executeQuery();
+			if(rst.next()) {
+				int wrongPasswordCount = rst.getInt(1);
+				return wrongPasswordCount;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return -1;
 	}
-
+	
+	
+	
 	// adding new user to the system
 	public void saveUser() {
 		
 	}
 
-	private boolean passwordCheck(String password) {
+	private boolean passwordCheck() {
+		try {
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT password FROM users WHERE userName = ?");
+			pst.setString(1, userName);
+			ResultSet rst = pst.executeQuery();
+			if(rst.next()) { //password matches
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		return false;
 	}
@@ -112,4 +159,43 @@ public class Users {
 		return null;
 	}
 	
+	public Object[][] tableArray() {
+		Object obj[][] = new Object[DataBaseConnection.getCount("users", "employeeid")-1][6];
+		try {
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT employeeid, userName, accessStatus, accesslevel, wrongPassword FROM users WHERE employeeId > 0");
+			ResultSet rst = pst.executeQuery();
+			int i =0 ;
+			if(rst.next()) {
+				obj[i][0] = rst.getInt(1);
+				obj[i][1] = rst.getString(2);
+				obj[i][2] = rst.getBoolean(3);
+				obj[i][3] = rst.getInt(4);
+				obj[i][4] = rst.getInt(5);
+				i++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return obj;
+	}
+	
+	public List<Employee> employeeListWithoutUserAccounts() {
+		List<Employee> employees = new ArrayList<Employee>();
+		try {
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT id, name FROM employee WHERE id != (SELECT employeeId FROM users)");
+			ResultSet rst = pst.executeQuery();
+			while(rst.next()) {
+				Employee employee = new Employee();
+				employee.setId(rst.getInt(1));
+				employee.setName(rst.getString(2));
+				employees.add(employee);
+			}
+			return employees;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 }

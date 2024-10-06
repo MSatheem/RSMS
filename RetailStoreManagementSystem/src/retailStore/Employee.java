@@ -86,12 +86,12 @@ public class Employee {
 	
 	private Employee[] getAllEmployee() {
 		//creating array of customer objects from database
-		Employee employee[] = new Employee[DataBaseConnection.getCount("employee", "id")];
+		Employee employee[] = new Employee[DataBaseConnection.getCount("employee", "id")-1];
 		PreparedStatement pst;
 		ResultSet rst;
 		
 		try {
-			pst = DataBaseConnection.con.prepareStatement("SELECT id,name,contactNo,address,email,position FROM employee");
+			pst = DataBaseConnection.con.prepareStatement("SELECT id,name,contactNo,address,email,position FROM employee WHERE id > 0");
 			rst = pst.executeQuery();
 			int i=0;
 			while(rst.next()) {
@@ -114,8 +114,8 @@ public class Employee {
 	
 	public Object[][] populateTableArray() {
 		Employee employee[] = getAllEmployee();
-		int count = DataBaseConnection.getCount("employee" ,"id");
-		Object objects[][] = new Object[DataBaseConnection.getCount("employee", "id")][5];
+		int count = DataBaseConnection.getCount("employee" ,"id")-1;
+		Object objects[][] = new Object[count][5];
 		for(int i=0; i<count; i++) {
 			objects[i][0] = employee[i].id;
 			objects[i][1] = employee[i].name;
@@ -140,7 +140,7 @@ public class Employee {
 		
 		return false;
 	}
-
+	
 	public int getId() {
 		return id;
 	}

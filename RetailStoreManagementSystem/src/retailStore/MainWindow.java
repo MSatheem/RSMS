@@ -3,6 +3,7 @@ package retailStore;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.Color;
@@ -13,7 +14,7 @@ public class MainWindow {
 
 	private JFrame frame;
 	private AdminFunctionOption adminFunctionOption;
-	/**
+	DefaultComboBoxModel<Employee> comboBoxModel;	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {

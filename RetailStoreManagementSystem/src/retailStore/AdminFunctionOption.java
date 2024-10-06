@@ -29,6 +29,7 @@ public class AdminFunctionOption extends JPanel {
 	private ProductUpdateUI productUpdateUI;
 	private EmployeeUI employeeUI;
 	private EmployeeUpdateUI employeeUpdateUI;
+	private ManageUserAccountsUI manageUserAccountsUI;
 	/**
 	 * Create the panel.
 	 */
@@ -45,6 +46,7 @@ public class AdminFunctionOption extends JPanel {
 		productUpdateUI = null;
 		employeeUI = null;
 		employeeUpdateUI = null;
+		manageUserAccountsUI = null;
 		panel.removeAll();
 		panel.setVisible(false);
 	}
@@ -62,7 +64,7 @@ public class AdminFunctionOption extends JPanel {
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		menuBar.setBounds(0, 0, 531, 31);
+		menuBar.setBounds(0, 0, 603, 31);
 		add(menuBar);
 		
 		JMenu StoreMenu = new JMenu("Store");
@@ -226,6 +228,7 @@ public class AdminFunctionOption extends JPanel {
 		mnReport.add(mntmSalesreport);
 		
 		JMenu mnEmployee = new JMenu("Employee");
+		mnEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menuBar.add(mnEmployee);
 		
 		JMenuItem mntmAddEmployee = new JMenuItem("Add");
@@ -249,6 +252,21 @@ public class AdminFunctionOption extends JPanel {
 			}
 		});
 		mnEmployee.add(mntmNewMenuItem_4);
+		
+		JMenu mnNewMenu = new JMenu("User");
+		mnNewMenu.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Add");
+		mntmNewMenuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				manageUserAccountsUI = new ManageUserAccountsUI();
+				panel.add(manageUserAccountsUI);
+				panel.setVisible(true);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_5);
 		
 	}
 }
