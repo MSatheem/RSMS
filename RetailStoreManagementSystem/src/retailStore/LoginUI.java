@@ -78,7 +78,8 @@ public class LoginUI extends JPanel {
 		btnLogin.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				if(!tfUserName.getText().isBlank() & !passwordField.getPassword().toString().isBlank()) {
+				mainWindow.loginSuccessfull();
+				/*if(!tfUserName.getText().isBlank() & !passwordField.getPassword().toString().isBlank()) {
 					String userName = tfUserName.getText();
 					String password = passwordField.getText();
 					user = new Users(userName, password);
@@ -91,7 +92,7 @@ public class LoginUI extends JPanel {
 					JOptionPane.showMessageDialog(null, "Fields Cannot be empty", "Warning", JOptionPane.WARNING_MESSAGE);
 				}
 				user = null;
-				clearFields();
+				clearFields();*/
 			}
 		});
 		btnLogin.setFont(new Font("Arial", Font.BOLD, 20));
@@ -101,6 +102,5 @@ public class LoginUI extends JPanel {
 		lblNewLabel_1.setFont(new Font("Serif", Font.BOLD, 40));
 		lblNewLabel_1.setBounds(202, 79, 796, 108);
 		add(lblNewLabel_1);
-		
 	}
 }
