@@ -27,6 +27,9 @@ public class AdminFunctionOption extends JPanel {
 	private ReturnProductUI returnProductUI;
 	private SalesReportUI salesReportUI;
 	private ProductUpdateUI productUpdateUI;
+	private EmployeeUI employeeUI;
+	private EmployeeUpdateUI employeeUpdateUI;
+	private ManageUserAccountsUI manageUserAccountsUI;
 	/**
 	 * Create the panel.
 	 */
@@ -41,6 +44,9 @@ public class AdminFunctionOption extends JPanel {
 		returnProductUI = null;
 		salesReportUI = null;
 		productUpdateUI = null;
+		employeeUI = null;
+		employeeUpdateUI = null;
+		manageUserAccountsUI = null;
 		panel.removeAll();
 		panel.setVisible(false);
 	}
@@ -58,7 +64,7 @@ public class AdminFunctionOption extends JPanel {
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		menuBar.setBounds(0, 0, 500, 31);
+		menuBar.setBounds(0, 0, 603, 31);
 		add(menuBar);
 		
 		JMenu StoreMenu = new JMenu("Store");
@@ -220,6 +226,47 @@ public class AdminFunctionOption extends JPanel {
 			}
 		});
 		mnReport.add(mntmSalesreport);
+		
+		JMenu mnEmployee = new JMenu("Employee");
+		mnEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		menuBar.add(mnEmployee);
+		
+		JMenuItem mntmAddEmployee = new JMenuItem("Add");
+		mntmAddEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				employeeUI = new EmployeeUI();
+				panel.add(employeeUI);
+				panel.setVisible(true);
+			}
+		});
+		mnEmployee.add(mntmAddEmployee);
+		
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Update");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				employeeUpdateUI = new EmployeeUpdateUI();
+				panel.add(employeeUpdateUI);
+				panel.setVisible(true);
+			}
+		});
+		mnEmployee.add(mntmNewMenuItem_4);
+		
+		JMenu mnNewMenu = new JMenu("User");
+		mnNewMenu.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Add");
+		mntmNewMenuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				manageUserAccountsUI = new ManageUserAccountsUI();
+				panel.add(manageUserAccountsUI);
+				panel.setVisible(true);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_5);
 		
 	}
 }

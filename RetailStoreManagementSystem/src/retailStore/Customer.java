@@ -125,7 +125,7 @@ public class Customer {
 	}
 	
 	//remove customer from database
-	public void removeCustomer() {
+	public void removeCustomer() { //use of this function should be avoided as foreign key constraint problems
 		connectToDatabase();
 		PreparedStatement pst;
 		
@@ -133,7 +133,6 @@ public class Customer {
 			pst = con.prepareStatement("DELETE FROM customer WHERE id ?");
 			pst.setInt(1, this.id);
 			pst.execute();
-			System.out.println("Customer removed");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

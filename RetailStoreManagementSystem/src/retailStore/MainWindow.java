@@ -12,7 +12,23 @@ import java.awt.event.ActionEvent;
 public class MainWindow {
 
 	private JFrame frame;
-	private AdminFunctionOption adminFunctionOption;
+	private LoginUI loginUI;
+	JButton btnNewButton;
+	
+	public void loginSuccessfull() {
+		frame.getContentPane().remove(loginUI);
+		frame.getContentPane().setVisible(false);
+		AdminFunctionOption adminFunctionOption = new AdminFunctionOption();
+		frame.getContentPane().add(adminFunctionOption);
+		frame.getContentPane().setVisible(true);
+		adminFunctionOption.add(btnNewButton);
+	}
+	
+	public void login() {
+		loginUI = new LoginUI(this);
+		frame.getContentPane().add(loginUI);
+		loginUI.add(btnNewButton);
+	}
 	/**
 	 * Launch the application.
 	 */
@@ -44,16 +60,12 @@ public class MainWindow {
 		frame.setBounds(0, 0, 1200, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		//frame.setUndecorated(true);
+		frame.setUndecorated(true);
 		
 		//starting xampp
-		XamppAuto.startXamppServer();
+		//XamppAuto.startXamppServer();
 		
-		//adding function panel
-		adminFunctionOption = new AdminFunctionOption();
-		frame.getContentPane().add(adminFunctionOption);
-		
-		JButton btnNewButton = new JButton("X");
+		btnNewButton = new JButton("X");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//closing xampp
@@ -64,6 +76,6 @@ public class MainWindow {
 		btnNewButton.setBackground(Color.RED);
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 30));
 		btnNewButton.setBounds(1113, 0, 85, 30);
-		adminFunctionOption.add(btnNewButton);
+		login();
 	}
 }
