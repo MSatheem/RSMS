@@ -30,6 +30,7 @@ public class AdminFunctionOption extends JPanel {
 	private EmployeeUI employeeUI;
 	private EmployeeUpdateUI employeeUpdateUI;
 	private ManageUserAccountsUI manageUserAccountsUI;
+	private InventoryReportUI inventoryReportUI;
 	/**
 	 * Create the panel.
 	 */
@@ -47,6 +48,7 @@ public class AdminFunctionOption extends JPanel {
 		employeeUI = null;
 		employeeUpdateUI = null;
 		manageUserAccountsUI = null;
+		inventoryReportUI = null;
 		panel.removeAll();
 		panel.setVisible(false);
 	}
@@ -54,12 +56,16 @@ public class AdminFunctionOption extends JPanel {
 	public AdminFunctionOption() {
 		setBackground(new Color(255, 255, 255));
 		setLayout(null);
-		setBounds(0,0,1199,750);
+		setBounds(0,0,1200, 800);
 
 		panel = new JPanel();
 		panel.setBounds(49, 41, 1100, 700);
 		add(panel);
 		panel.setLayout(null);
+		
+		JMenuItem menuItem = new JMenuItem("New menu item");
+		menuItem.setBounds(315, 10, 135, 26);
+		panel.add(menuItem);
 		panel.setVisible(false);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -226,6 +232,17 @@ public class AdminFunctionOption extends JPanel {
 			}
 		});
 		mnReport.add(mntmSalesreport);
+		
+		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Inventory Report");
+		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				inventoryReportUI = new InventoryReportUI();
+				panel.add(inventoryReportUI);
+				panel.setVisible(true);
+			}
+		});
+		mnReport.add(mntmNewMenuItem_6);
 		
 		JMenu mnEmployee = new JMenu("Employee");
 		mnEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 18));
