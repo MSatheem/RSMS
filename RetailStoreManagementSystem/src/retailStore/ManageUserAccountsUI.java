@@ -13,8 +13,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class ManageUserAccountsUI extends JPanel {
 
@@ -26,25 +24,31 @@ public class ManageUserAccountsUI extends JPanel {
 	private JComboBox<String> comboBoxEmployee;
 	@SuppressWarnings("rawtypes")
 	JComboBox cbAccessLevel, cbAccessStatus;
-	private JTextField tfFailedAttempts;
+	Users newUser;
+	Employee employee;
 	
 	private void populateTable() {
 		Users users = new Users();
-		String name[] = {"Id","User Name","Access Status","Access Level","Failed Attempts"};
+		String name[] = {"Id","User Name","Access Status","Access Level"};
 		model = new DefaultTableModel(users.tableArray(),name);
 		table.setModel(model);
 		populateComboBox();
 	}
 	
 	private void populateComboBox() {
-		Users users = new Users();
-		String data[] = new String[users.employeeListWithoutUserAccounts().size()];
+		newUser  = new Users();
+		String data[] = new String[newUser.employeeListWithoutUserAccounts().size()];
 		for(int i=0; i<data.length; i++) {
-			Employee employee = users.employeeListWithoutUserAccounts().get(i);
+			employee = newUser.employeeListWithoutUserAccounts().get(i);
 			data[i] = employee.getId() + " "+ String.valueOf(employee.getName());
  		}
 		comboBoxModel = new DefaultComboBoxModel<String>(data);
 		comboBoxEmployee = new JComboBox<String>(comboBoxModel);
+		comboBoxEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		comboBoxEmployee.setModel(comboBoxModel);
 		comboBoxEmployee.setSelectedIndex(-1);
 		clearFields();
@@ -52,7 +56,6 @@ public class ManageUserAccountsUI extends JPanel {
 	
 	private void clearFields() {
 		tfUserName.setText("");
-		tfFailedAttempts.setText("");
 		cbAccessLevel.setSelectedIndex(-1);
 		cbAccessStatus.setSelectedIndex(-1);
 		comboBoxEmployee.setSelectedIndex(-1);
@@ -74,11 +77,6 @@ public class ManageUserAccountsUI extends JPanel {
 				return false;
 			}
 		};
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
 		scrollPane.setViewportView(table);
 		
 		JLabel lblNewLabel = new JLabel("Users");
@@ -124,17 +122,22 @@ public class ManageUserAccountsUI extends JPanel {
 		cbAccessStatus.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		cbAccessStatus.setModel(new DefaultComboBoxModel(new String[] {"False", "True"}));
 		
-		JLabel lblNewLabel_1_1_2 = new JLabel("Failed Attempts");
-		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel_1_1_2.setBounds(483, 31, 117, 27);
-		panel.add(lblNewLabel_1_1_2);
-		
-		tfFailedAttempts = new JTextField();
-		tfFailedAttempts.setColumns(10);
-		tfFailedAttempts.setBounds(635, 37, 117, 25);
-		panel.add(tfFailedAttempts);
-		
 		JButton btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//creating user and saving user
+				if(cbAccessStatus.getSelectedIndex() == 1) {
+					newUser.setAccessStatus(true);
+				} else {
+					newUser.setAccessStatus(false);
+				}
+				newUser.setUserName(tfUserName.getText());
+				newUser.setAccessLevel(cbAccessLevel.getSelectedIndex());
+				newUser.setEmployeeId(newUser.employeeListWithoutUserAccounts().get(comboBoxEmployee.getSelectedIndex()).getId());
+				newUser.addNewUser();
+				populateTable();
+			}
+		});
 		btnSave.setBounds(667, 175, 85, 21);
 		panel.add(btnSave);
 		
