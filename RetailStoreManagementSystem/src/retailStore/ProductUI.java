@@ -4,39 +4,55 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import javax.swing.SwingConstants;
 
 public class ProductUI extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField tfProductName;
-	private JTextField tfSupplierId;
-	private JTextField tfSupplierName;
-	
+	JComboBox<String> cbSupplier;	
+	Supplier[] supplier;
+	DefaultComboBoxModel<String> modelComboBoxSupplier;
+	ProductListTable productListTable;
 	
 	private void clearFields() {
 		tfProductName.setText("");
-		tfSupplierId.setText("");
-		tfSupplierName.setText("");
+		cbSupplier.setSelectedIndex(-1); //no item is selected in combo box supplier
+	}
+	
+	
+	private void populateSupplier() {
+		supplier = new Supplier().getAllSuppliers();
+		String[] dataIn = new String[supplier.length];
+		for(int i=0; i<supplier.length; i++) {
+			dataIn[i] =  String.valueOf(supplier[i].getId()) + " " + supplier[i].getName() ;
+		}
+		modelComboBoxSupplier = new DefaultComboBoxModel<String>(dataIn);
+		cbSupplier.setModel(modelComboBoxSupplier);
+		cbSupplier.setSelectedIndex(-1);
 	}
 	/**
 	 * Create the panel.
 	 */
 	public ProductUI() {
+		setBackground(new Color(0, 255, 204));
 		setLayout(null);
-		setBounds(1, 1, 1000, 700);
+		setBounds(2, 2, 1197, 766);
 		
 		JPanel addEditCustomer_1 = new JPanel();
 		addEditCustomer_1.setLayout(null);
 		addEditCustomer_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		addEditCustomer_1.setBounds(321, 64, 450, 305);
+		addEditCustomer_1.setBounds(88, 230, 450, 305);
 		add(addEditCustomer_1);
 		
 		JLabel lblNewLabel_1 = new JLabel("Name :");
@@ -55,57 +71,10 @@ public class ProductUI extends JPanel {
 		tfProductName.setBounds(145, 23, 295, 30);
 		addEditCustomer_1.add(tfProductName);
 		
-		tfSupplierId = new JTextField();
-		tfSupplierId.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				Supplier supplier = new Supplier();
-				int id;
-				
-				if(!tfSupplierId.getText().contentEquals("")) { //not empty
-					try { //number only allowed
-						id = Integer.valueOf(tfSupplierId.getText());
-						supplier.setId(id);
-						if(supplier.isSaved()) {
-							supplier = supplier.getSuppilerDetail();
-							tfSupplierName.setText(supplier.getName());
-						} else {
-							tfSupplierName.setText("");
-						}
-					} catch (NumberFormatException e1) {
-						tfSupplierName.setText("");
-						System.out.println(e1);
-					}	
-				} else {
-					tfSupplierName.setText("");
-				}
-			}
-		});
-		tfSupplierId.setFont(new Font("Arial", Font.BOLD, 20));
-		tfSupplierId.setColumns(10);
-		tfSupplierId.setBounds(145, 81, 62, 30);
-		addEditCustomer_1.add(tfSupplierId);
-		
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
 		panel_1.setBounds(122, 203, 295, 62);
 		addEditCustomer_1.add(panel_1);
-		
-		JButton btnNewButton_1 = new JButton("Save");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String productName = tfProductName.getText();
-				int id = Integer.valueOf(tfSupplierId.getText());
-				if(!tfSupplierName.getText().contentEquals("")) {
-					Product newProduct = new Product(productName, id);
-					clearFields();
-					newProduct.saveProduct();
-				}
-			}
-		});
-		btnNewButton_1.setFont(new Font("Arial", Font.BOLD, 20));
-		btnNewButton_1.setBounds(169, 14, 83, 33);
-		panel_1.add(btnNewButton_1);
 		
 		JButton btnClear_1 = new JButton("Clear");
 		btnClear_1.addActionListener(new ActionListener() {
@@ -117,16 +86,45 @@ public class ProductUI extends JPanel {
 		btnClear_1.setBounds(35, 14, 91, 33);
 		panel_1.add(btnClear_1);
 		
-		tfSupplierName = new JTextField();
-		tfSupplierName.setEnabled(false);
-		tfSupplierName.setFont(new Font("Arial", Font.BOLD, 20));
-		tfSupplierName.setColumns(10);
-		tfSupplierName.setBounds(238, 81, 202, 30);
-		addEditCustomer_1.add(tfSupplierName);
-		
 		JLabel lblNewLabel_2 = new JLabel("Product");
-		lblNewLabel_2.setBounds(523, 22, 45, 13);
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 25));
+		lblNewLabel_2.setBounds(487, 89, 223, 71);
 		add(lblNewLabel_2);
-
+		
+		cbSupplier = new JComboBox<String>();
+		cbSupplier.setBounds(146, 79, 294, 40);
+		addEditCustomer_1.add(cbSupplier);
+		cbSupplier.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		
+		JButton btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String productName = tfProductName.getText();
+				if(cbSupplier.getSelectedIndex() > -1) { //item selected in combo box
+					int supplierId = supplier[cbSupplier.getSelectedIndex()].getId();
+					Product product = new Product(productName, supplierId);
+					int result = JOptionPane.showConfirmDialog(null, "Are you sure want to save " + product.getName());
+					if(result == 0) { //yes selected
+						product.saveProduct(); //saving product
+						clearFields();
+						productListTable.populateTable();
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Fields Cannot be Empty", "Warning", JOptionPane.WARNING_MESSAGE); 
+				}
+			}
+		});
+		btnSave.setFont(new Font("Arial", Font.BOLD, 20));
+		btnSave.setBounds(169, 14, 83, 33);
+		panel_1.add(btnSave);
+		
+		productListTable = new ProductListTable();
+		productListTable.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		productListTable.setBounds(626, 230, 481, 405);
+		add(productListTable);
+		
+		populateSupplier();
+	
 	}
 }
