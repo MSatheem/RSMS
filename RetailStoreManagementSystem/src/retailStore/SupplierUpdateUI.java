@@ -6,6 +6,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -72,13 +74,14 @@ public class SupplierUpdateUI extends JPanel {
 	 */
 	@SuppressWarnings("serial")
 	public SupplierUpdateUI() {
+		setBackground(new Color(254, 160, 170));
 		setLayout(null);
-		setBounds(1, 1, 1000, 700);
+		setBounds(1, 1, 1197, 766);
 		
 		JPanel addEditCustomer = new JPanel();
 		addEditCustomer.setLayout(null);
 		addEditCustomer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		addEditCustomer.setBounds(219, 63, 562, 422);
+		addEditCustomer.setBounds(317, 63, 562, 422);
 		add(addEditCustomer);
 		
 		JLabel lblNewLabel = new JLabel("Name :");
@@ -115,11 +118,14 @@ public class SupplierUpdateUI extends JPanel {
 					supplier.setContactPerson(tfContactPerson.getText());
 					supplier.setContactNumber(Integer.valueOf(tfPhoneNo.getText()));
 					supplier.setEmail(tfEmail.getText());
-					if(supplier.updateSupplier()) {
-						System.out.println("Updated");
+					int result = JOptionPane.showConfirmDialog(null, "Are you sure want to save " + supplier.getName());
+					if(result == 0) { //selected yes
+						supplier.updateSupplier();
+						clearFields();
 					}
-					clearFields();
 					populateTable();
+				} else { //field empty
+					JOptionPane.showMessageDialog(null, "Fields Cannot be empty", "Warning", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
@@ -177,13 +183,14 @@ public class SupplierUpdateUI extends JPanel {
 		tfContactPerson.setFont(new Font("Arial", Font.BOLD, 20));
 		tfContactPerson.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("Supplier");
+		JLabel lblNewLabel_1 = new JLabel("Edit Supplier");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(444, 22, 111, 37);
+		lblNewLabel_1.setBounds(514, 22, 169, 37);
 		add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(106, 541, 787, 110);
+		scrollPane.setBounds(205, 541, 787, 215);
 		add(scrollPane);
 		
 		table = new JTable() {
@@ -191,6 +198,7 @@ public class SupplierUpdateUI extends JPanel {
 				return false;
 			}
 		};
+		table.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		table.addMouseListener(new MouseAdapter() {
 			@Override 
 			public void mouseClicked(MouseEvent e) {
