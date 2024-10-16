@@ -2,19 +2,18 @@ package retailStore;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.awt.event.ActionEvent;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
 
 public class CustomerUI extends JPanel {
 
@@ -26,7 +25,6 @@ public class CustomerUI extends JPanel {
 	private JTextField tfEmail;
 	private JDateChooser joinDate;
 	private Date dateToday;
-	private JTable table;
 	DefaultTableModel model;
 	
 	private void clearFields() {
@@ -41,21 +39,21 @@ public class CustomerUI extends JPanel {
 	private void populateTable() {
 		Customer c = new Customer();
 		String name[] = {"Id","Name","Address","City","ContactNumber","Email","Join Date"};
-		
 		model = new DefaultTableModel(c.populateCustomerTable(),name);
-		table.setModel(model);
 	}
 	
 	/**
 	 * Create the panel.
 	 */
 	public CustomerUI() {
+		setBackground(new Color(250, 235, 215));
 		setLayout(null);
-		setBounds(0,0,1000,700);
+		setBounds(2,2,1197,766);
 		
 		JPanel addEditCustomer = new JPanel();
+		addEditCustomer.setBackground(new Color(255, 218, 185));
 		addEditCustomer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		addEditCustomer.setBounds(275, 88, 450, 440);
+		addEditCustomer.setBounds(142, 163, 450, 440);
 		add(addEditCustomer);
 		addEditCustomer.setLayout(null);
 		
@@ -128,12 +126,14 @@ public class CustomerUI extends JPanel {
 		addEditCustomer.add(tfEmail);
 		
 		JPanel panelSave = new JPanel();
+		panelSave.setBackground(new Color(250, 235, 215));
 		panelSave.setBounds(145, 368, 295, 62);
 		addEditCustomer.add(panelSave);
 		panelSave.setLayout(null);
 		
-		JButton btnNewButton = new JButton("Save");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnSave = new JButton("Save");
+		btnSave.setForeground(new Color(0, 128, 0));
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//reading details from customer UI
 				String name = tfName.getText();
@@ -145,19 +145,20 @@ public class CustomerUI extends JPanel {
 				
 				//creating customer object
 				Customer customer = new Customer(name,address,city,phoneNo,email,dateIn);
-				
-				if(customer.saveNewCustomer()) {
+				int result = JOptionPane.showConfirmDialog(btnSave, "Are you sure want to save " + customer.getName() + "," + customer.getContactNumber());
+				if(result == 1) {
+					customer.saveNewCustomer();
 					clearFields();
 				}
-				populateTable();
-				
+				populateTable();	
 			}
 		});
-		btnNewButton.setFont(new Font("Arial", Font.BOLD, 20));
-		btnNewButton.setBounds(169, 14, 83, 33);
-		panelSave.add(btnNewButton);
+		btnSave.setFont(new Font("Arial", Font.BOLD, 20));
+		btnSave.setBounds(169, 14, 83, 33);
+		panelSave.add(btnSave);
 		
 		JButton btnClear = new JButton("Clear");
+		btnClear.setForeground(new Color(255, 0, 0));
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clearFields();
@@ -169,18 +170,12 @@ public class CustomerUI extends JPanel {
 		
 		JLabel lblNewLabel_1 = new JLabel("Customer");
 		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 20));
-		lblNewLabel_1.setBounds(454, 32, 92, 24);
+		lblNewLabel_1.setBounds(552, 61, 92, 24);
 		add(lblNewLabel_1);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(104, 546, 792, 144);
-		add(scrollPane);
-		
-		table = new JTable();
-		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		scrollPane.setViewportView(table);
+		CustomerListTable customerListTable = new CustomerListTable();
+		customerListTable.setBounds(734, 221, 319, 324);
+		add(customerListTable);
 		populateTable();
-		
-
 	}
 }

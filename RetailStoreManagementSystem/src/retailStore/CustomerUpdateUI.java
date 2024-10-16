@@ -15,6 +15,7 @@ import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 public class CustomerUpdateUI extends JPanel {
 
@@ -50,12 +51,14 @@ public class CustomerUpdateUI extends JPanel {
 	 * Create the panel.
 	 */
 	public CustomerUpdateUI() {
+		setBackground(new Color(128, 128, 128));
 		setLayout(null);
-		setBounds(0,0,1000,700);
+		setBounds(2,2,1197,766);
 		
 		JPanel addEditCustomer = new JPanel();
-		addEditCustomer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		addEditCustomer.setBounds(275, 88, 450, 440);
+		addEditCustomer.setBackground(new Color(211, 211, 211));
+		addEditCustomer.setBorder(new LineBorder(new Color(255, 0, 0), 1, true));
+		addEditCustomer.setBounds(375, 100, 450, 440);
 		add(addEditCustomer);
 		addEditCustomer.setLayout(null);
 		
@@ -127,12 +130,19 @@ public class CustomerUpdateUI extends JPanel {
 		tfEmail.setBounds(145, 258, 295, 30);
 		addEditCustomer.add(tfEmail);
 		
-		JPanel panelSave = new JPanel();
-		panelSave.setBounds(145, 368, 295, 62);
-		addEditCustomer.add(panelSave);
-		panelSave.setLayout(null);
+		JButton btnClear = new JButton("Clear");
+		btnClear.setBounds(150, 381, 93, 33);
+		addEditCustomer.add(btnClear);
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearFields();
+			}
+		});
+		btnClear.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		JButton btnNewButton = new JButton("Update");
+		btnNewButton.setBounds(303, 381, 124, 33);
+		addEditCustomer.add(btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//reading details from customer UI
@@ -154,30 +164,19 @@ public class CustomerUpdateUI extends JPanel {
 			}
 		});
 		btnNewButton.setFont(new Font("Arial", Font.BOLD, 20));
-		btnNewButton.setBounds(161, 14, 99, 33);
-		panelSave.add(btnNewButton);
 		
-		JButton btnClear = new JButton("Clear");
-		btnClear.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				clearFields();
-			}
-		});
-		btnClear.setFont(new Font("Arial", Font.BOLD, 20));
-		btnClear.setBounds(34, 14, 93, 33);
-		panelSave.add(btnClear);
-		
-		JLabel lblNewLabel_1 = new JLabel("Customer");
+		JLabel lblNewLabel_1 = new JLabel("Updating Customer Details");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 20));
-		lblNewLabel_1.setBounds(454, 32, 92, 24);
+		lblNewLabel_1.setBounds(360, 48, 479, 24);
 		add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(104, 546, 792, 144);
+		scrollPane.setBounds(204, 608, 792, 144);
 		add(scrollPane);
 		
 		table = new JTable();
-		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		table.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		scrollPane.setViewportView(table);
 		populateTable();
 		
