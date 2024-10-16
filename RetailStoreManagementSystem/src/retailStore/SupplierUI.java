@@ -21,7 +21,8 @@ public class SupplierUI extends JPanel {
 	private JTextField tfPhoneNo;
 	private JTextField tfEmail;
 	private JTextField tfContactPerson;
-
+	SupplierListTable supplierlistTable = new SupplierListTable();
+	JPanel panelField;
 	
 	private void clearFields() {
 		tfName.setText("");
@@ -35,77 +36,63 @@ public class SupplierUI extends JPanel {
 	 * Create the panel.
 	 */
 	public SupplierUI() {
+		setBackground(new Color(127, 255, 212));
 		setLayout(null);
-		setBounds(1, 1, 1000, 700);
+		setBounds(2, 2, 1197, 766);
 		
 		JPanel addEditCustomer = new JPanel();
 		addEditCustomer.setLayout(null);
 		addEditCustomer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		addEditCustomer.setBounds(219, 63, 562, 422);
+		addEditCustomer.setBounds(46, 133, 562, 422);
 		add(addEditCustomer);
 		
 		JLabel lblNewLabel = new JLabel("Name :");
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
-		lblNewLabel.setBounds(10, 30, 105, 24);
+		lblNewLabel.setBounds(32, 34, 170, 24);
 		addEditCustomer.add(lblNewLabel);
 		
 		JLabel lblAddress = new JLabel("Address :");
 		lblAddress.setFont(new Font("Arial", Font.BOLD, 20));
-		lblAddress.setBounds(10, 87, 105, 24);
+		lblAddress.setBounds(32, 92, 170, 24);
 		addEditCustomer.add(lblAddress);
 		
 		JLabel lblPhoneNo = new JLabel("Phone No :");
 		lblPhoneNo.setFont(new Font("Arial", Font.BOLD, 20));
-		lblPhoneNo.setBounds(10, 144, 105, 24);
+		lblPhoneNo.setBounds(32, 150, 170, 24);
 		addEditCustomer.add(lblPhoneNo);
 		
 		JLabel lblEmail = new JLabel("E-mail :");
 		lblEmail.setFont(new Font("Arial", Font.BOLD, 20));
-		lblEmail.setBounds(10, 201, 105, 24);
+		lblEmail.setBounds(32, 208, 170, 24);
 		addEditCustomer.add(lblEmail);
-		
-		tfName = new JTextField();
-		tfName.setFont(new Font("Arial", Font.BOLD, 20));
-		tfName.setColumns(10);
-		tfName.setBounds(205, 30, 295, 30);
-		addEditCustomer.add(tfName);
-		
-		tfAddress = new JTextField();
-		tfAddress.setFont(new Font("Arial", Font.BOLD, 20));
-		tfAddress.setColumns(10);
-		tfAddress.setBounds(205, 88, 295, 30);
-		addEditCustomer.add(tfAddress);
-		
-		tfPhoneNo = new JTextField();
-		tfPhoneNo.setFont(new Font("Arial", Font.BOLD, 20));
-		tfPhoneNo.setColumns(10);
-		tfPhoneNo.setBounds(205, 151, 295, 30);
-		addEditCustomer.add(tfPhoneNo);
-		
-		tfEmail = new JTextField();
-		tfEmail.setFont(new Font("Arial", Font.BOLD, 20));
-		tfEmail.setColumns(10);
-		tfEmail.setBounds(205, 208, 295, 30);
-		addEditCustomer.add(tfEmail);
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
-		panel.setBounds(145, 327, 295, 62);
+		panel.setBounds(234, 330, 295, 62);
 		addEditCustomer.add(panel);
 		
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				String name = tfName.getText();
-				String address = tfAddress.getText();
-				String contactPerson = tfContactPerson.getText();
-				int phoneNo = Integer.valueOf(tfPhoneNo.getText());
-				String email = tfEmail.getText();
-				Supplier supplier = new Supplier(name, address, email, phoneNo, contactPerson);
-				JOptionPane.showConfirmDialog(btnSave, "Are you sure want to save " + supplier.toString());
-				supplier.saveNewSupplier();
-				clearFields();
+				if(!ComponentChecker.isFieldsEmpty(panelField)) { // all fields populated
+					String name = tfName.getText();
+					String address = tfAddress.getText();
+					String contactPerson = tfContactPerson.getText();
+					int phoneNo = Integer.valueOf(tfPhoneNo.getText());
+					String email = tfEmail.getText();
+					Supplier supplier = new Supplier(name, address, email, phoneNo, contactPerson);
+					if(phoneNo >100000000 && phoneNo < 999999999) {
+						int result = JOptionPane.showConfirmDialog(btnSave, "Are you sure want to save " + supplier.getName());
+						if(result == 0) {
+							supplier.saveNewSupplier();
+							clearFields();
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "Enter correct contact number", "Warning", JOptionPane.WARNING_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Fields Cannot be Empty", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 		btnSave.setFont(new Font("Arial", Font.BOLD, 20));
@@ -122,22 +109,62 @@ public class SupplierUI extends JPanel {
 		btnClear.setBounds(27, 14, 99, 33);
 		panel.add(btnClear);
 		
-		tfContactPerson = new JTextField();
-		tfContactPerson.setFont(new Font("Arial", Font.BOLD, 20));
-		tfContactPerson.setColumns(10);
-		tfContactPerson.setBounds(205, 265, 295, 30);
-		addEditCustomer.add(tfContactPerson);
-		
 		JLabel lblContactPerson = new JLabel("Contact Person:");
 		lblContactPerson.setFont(new Font("Arial", Font.BOLD, 20));
-		lblContactPerson.setBounds(10, 258, 166, 24);
+		lblContactPerson.setBounds(32, 266, 170, 24);
 		addEditCustomer.add(lblContactPerson);
 		
-		JLabel lblNewLabel_1 = new JLabel("Supplier");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		panelField = new JPanel();
+		panelField.setBounds(212, 10, 340, 306);
+		addEditCustomer.add(panelField);
+		panelField.setLayout(null);
+		
+		tfName = new JTextField();
+		tfName.setBounds(23, 21, 295, 30);
+		panelField.add(tfName);
+		tfName.setFont(new Font("Arial", Font.BOLD, 20));
+		tfName.setColumns(10);
+		
+		tfAddress = new JTextField();
+		tfAddress.setBounds(23, 79, 295, 30);
+		panelField.add(tfAddress);
+		tfAddress.setFont(new Font("Arial", Font.BOLD, 20));
+		tfAddress.setColumns(10);
+		
+		tfPhoneNo = new JTextField();
+		tfPhoneNo.setBounds(23, 137, 295, 30);
+		panelField.add(tfPhoneNo);
+		tfPhoneNo.setFont(new Font("Arial", Font.BOLD, 20));
+		tfPhoneNo.setColumns(10);
+		
+		tfEmail = new JTextField();
+		tfEmail.setBounds(23, 195, 295, 30);
+		panelField.add(tfEmail);
+		tfEmail.setFont(new Font("Arial", Font.BOLD, 20));
+		tfEmail.setColumns(10);
+		
+		tfContactPerson = new JTextField();
+		tfContactPerson.setBounds(23, 253, 295, 30);
+		panelField.add(tfContactPerson);
+		tfContactPerson.setFont(new Font("Arial", Font.BOLD, 20));
+		tfContactPerson.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Add New Supplier");
+		lblNewLabel_1.setForeground(new Color(0, 128, 0));
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(444, 22, 111, 37);
+		lblNewLabel_1.setBounds(448, 10, 300, 113);
 		add(lblNewLabel_1);
+		
+		JPanel panelSupplierTable = new JPanel();
+		panelSupplierTable.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		panelSupplierTable.setBounds(654, 133, 412, 469);
+		add(panelSupplierTable);
+		panelSupplierTable.setLayout(null);
+		supplierlistTable.setBounds(7, 5, 398, 459);
+		panelSupplierTable.add(supplierlistTable);
+		panel.setVisible(true);
+		
 
 	}
 }

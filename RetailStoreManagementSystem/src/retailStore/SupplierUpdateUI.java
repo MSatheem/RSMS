@@ -118,12 +118,16 @@ public class SupplierUpdateUI extends JPanel {
 					supplier.setContactPerson(tfContactPerson.getText());
 					supplier.setContactNumber(Integer.valueOf(tfPhoneNo.getText()));
 					supplier.setEmail(tfEmail.getText());
-					int result = JOptionPane.showConfirmDialog(null, "Are you sure want to save " + supplier.getName());
-					if(result == 0) { //selected yes
-						supplier.updateSupplier();
-						clearFields();
+					if(Integer.valueOf(tfPhoneNo.getText()) >100000000 && Integer.valueOf(tfPhoneNo.getText()) < 999999999) {
+						int result = JOptionPane.showConfirmDialog(null, "Are you sure want to update " + supplier.getName());
+						if(result == 0) { //selected yes
+							supplier.updateSupplier();
+							clearFields();
+						}
+						populateTable();
+					} else {
+						JOptionPane.showMessageDialog(null, "Enter correct contact number", "Warning", JOptionPane.WARNING_MESSAGE);
 					}
-					populateTable();
 				} else { //field empty
 					JOptionPane.showMessageDialog(null, "Fields Cannot be empty", "Warning", JOptionPane.WARNING_MESSAGE);
 				}
