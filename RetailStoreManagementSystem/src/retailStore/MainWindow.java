@@ -1,7 +1,6 @@
 package retailStore;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -75,7 +74,7 @@ public class MainWindow {
 		});
 		btnNewButton.setBackground(Color.RED);
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnNewButton.setBounds(1113, 0, 85, 30);
+		btnNewButton.setBounds(1111, 4, 85, 30);
 		login();
 	}
 }
