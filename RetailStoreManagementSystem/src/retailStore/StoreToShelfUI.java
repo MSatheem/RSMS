@@ -73,7 +73,6 @@ public class StoreToShelfUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public StoreToShelfUI() {
 		setLayout(null);
 		setBounds(2, 2, 1197, 766);
