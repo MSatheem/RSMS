@@ -11,9 +11,6 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class CustomerListTable extends JPanel {
@@ -21,7 +18,6 @@ public class CustomerListTable extends JPanel {
 	static String product[][];
 	private JTextField textFieldSearch;
 	CustomerList customerList = new CustomerList();
-	private JButton btnNewButton;
 	
 	public void populateTable(Object[][] obj) {
 		String cName[] = { "ID", "Name", "ContactNo" };
@@ -32,9 +28,10 @@ public class CustomerListTable extends JPanel {
 		table.getColumnModel().getColumn(2).setPreferredWidth(40);
 		table.setRowHeight(30);
 	}
-	private void populateTable() {
+	public void populateTable() {
+		customerList.customerInfo();
 		String cName[] = { "ID", "Name", "ContactNo" };
-		DefaultTableModel model = new DefaultTableModel(null, cName);
+		DefaultTableModel model = new DefaultTableModel(customerList.tableArray(), cName);
 		table.setModel(model);
 		table.getColumnModel().getColumn(0).setPreferredWidth(8);
 		table.getColumnModel().getColumn(1).setPreferredWidth(40);
@@ -52,7 +49,7 @@ public class CustomerListTable extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(10, 54, 299, 206);
+		scrollPane.setBounds(10, 54, 299, 261);
 		add(scrollPane);
 
 		table = new JTable();
@@ -83,15 +80,6 @@ public class CustomerListTable extends JPanel {
 		textFieldSearch.setBounds(185, 15, 124, 30);
 		add(textFieldSearch);
 		textFieldSearch.setColumns(10);
-		
-		btnNewButton = new JButton("Select");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			 //getting the selected customer id and display it
-			}
-		});
-		btnNewButton.setBounds(224, 280, 85, 21);
-		add(btnNewButton);
 		populateTable();
 	}
 }

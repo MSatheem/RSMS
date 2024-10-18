@@ -2,20 +2,21 @@ package retailStore;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
-import com.toedter.calendar.JDateChooser;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CustomerUpdateUI extends JPanel {
 
@@ -25,31 +26,43 @@ public class CustomerUpdateUI extends JPanel {
 	private JTextField tfCity;
 	private JTextField tfPhoneNo;
 	private JTextField tfEmail;
-	private JDateChooser joinDate;
-	private Date dateToday;
 	private JTable table;
 	DefaultTableModel model;
-	
+	Customer customer;
+	JPanel panelFields;
 	private void clearFields() {
 		tfName.setText("");
 		tfAddress.setText("");
 		tfCity.setText("");
 		tfPhoneNo.setText("");
 		tfEmail.setText("");
-		joinDate.setDate(dateToday);
+	}
+	
+	private void populateFieldForEditing(Customer customer) {
+		tfName.setText(customer.getName());
+		tfAddress.setText(customer.getAddress());
+		tfCity.setText(customer.getCity());
+		tfPhoneNo.setText(String.valueOf(customer.getContactNumber()));
+		tfEmail.setText(customer.getEmail());
 	}
 	
 	private void populateTable() {
 		Customer c = new Customer();
-		String name[] = {"Id","Name","Address","City","ContactNumber","Email","Join Date"};
+		String name[] = {"Id","Name","Address","City","Contact","Email","Join Date"};
 		
 		model = new DefaultTableModel(c.populateCustomerTable(),name);
 		table.setModel(model);
+		table.getColumnModel().getColumn(0).setMaxWidth(40);
+		table.getColumnModel().getColumn(4).setWidth(20);
+		table.getColumnModel().getColumn(6).setMinWidth(100);
+		table.getColumnModel().getColumn(6).setMaxWidth(130);
+		
 	}
 	
 	/**
 	 * Create the panel.
 	 */
+	@SuppressWarnings("serial")
 	public CustomerUpdateUI() {
 		setBackground(new Color(128, 128, 128));
 		setLayout(null);
@@ -58,80 +71,37 @@ public class CustomerUpdateUI extends JPanel {
 		JPanel addEditCustomer = new JPanel();
 		addEditCustomer.setBackground(new Color(211, 211, 211));
 		addEditCustomer.setBorder(new LineBorder(new Color(255, 0, 0), 1, true));
-		addEditCustomer.setBounds(375, 100, 450, 440);
+		addEditCustomer.setBounds(375, 100, 450, 370);
 		add(addEditCustomer);
 		addEditCustomer.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Name :");
-		lblNewLabel.setBounds(10, 30, 105, 24);
+		lblNewLabel.setBounds(10, 31, 105, 24);
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
 		addEditCustomer.add(lblNewLabel);
 		
 		JLabel lblAddress = new JLabel("Address :");
-		lblAddress.setBounds(10, 87, 105, 24);
+		lblAddress.setBounds(10, 86, 105, 24);
 		lblAddress.setFont(new Font("Arial", Font.BOLD, 20));
 		addEditCustomer.add(lblAddress);
 		
 		JLabel lblCity = new JLabel("City :");
-		lblCity.setBounds(10, 144, 105, 24);
+		lblCity.setBounds(10, 141, 105, 24);
 		lblCity.setFont(new Font("Arial", Font.BOLD, 20));
 		addEditCustomer.add(lblCity);
 		
 		JLabel lblPhoneNo = new JLabel("Phone No :");
-		lblPhoneNo.setBounds(10, 201, 105, 24);
+		lblPhoneNo.setBounds(10, 196, 105, 24);
 		lblPhoneNo.setFont(new Font("Arial", Font.BOLD, 20));
 		addEditCustomer.add(lblPhoneNo);
 		
 		JLabel lblEmail = new JLabel("E-mail :");
-		lblEmail.setBounds(10, 258, 105, 24);
+		lblEmail.setBounds(10, 251, 105, 24);
 		lblEmail.setFont(new Font("Arial", Font.BOLD, 20));
 		addEditCustomer.add(lblEmail);
 		
-		JLabel lblJoiningDate = new JLabel("Join Date :");
-		lblJoiningDate.setBounds(10, 315, 105, 24);
-		lblJoiningDate.setFont(new Font("Arial", Font.BOLD, 20));
-		addEditCustomer.add(lblJoiningDate);
-		
-		dateToday = new Date();
-		
-		joinDate = new JDateChooser();
-		joinDate.getCalendarButton().setFont(new Font("Arial", Font.PLAIN, 20));
-		joinDate.setBounds(152, 315, 130, 19);
-		joinDate.setDate(dateToday);
-		addEditCustomer.add(joinDate);
-		
-		tfName = new JTextField();
-		tfName.setFont(new Font("Arial", Font.BOLD, 20));
-		tfName.setBounds(145, 23, 295, 30);
-		addEditCustomer.add(tfName);
-		tfName.setColumns(10);
-		
-		tfAddress = new JTextField();
-		tfAddress.setFont(new Font("Arial", Font.BOLD, 20));
-		tfAddress.setColumns(10);
-		tfAddress.setBounds(145, 81, 295, 30);
-		addEditCustomer.add(tfAddress);
-		
-		tfCity = new JTextField();
-		tfCity.setFont(new Font("Arial", Font.BOLD, 20));
-		tfCity.setColumns(10);
-		tfCity.setBounds(145, 144, 295, 30);
-		addEditCustomer.add(tfCity);
-		
-		tfPhoneNo = new JTextField();
-		tfPhoneNo.setFont(new Font("Arial", Font.BOLD, 20));
-		tfPhoneNo.setColumns(10);
-		tfPhoneNo.setBounds(145, 201, 295, 30);
-		addEditCustomer.add(tfPhoneNo);
-		
-		tfEmail = new JTextField();
-		tfEmail.setFont(new Font("Arial", Font.BOLD, 20));
-		tfEmail.setColumns(10);
-		tfEmail.setBounds(145, 258, 295, 30);
-		addEditCustomer.add(tfEmail);
-		
 		JButton btnClear = new JButton("Clear");
-		btnClear.setBounds(150, 381, 93, 33);
+		btnClear.setBounds(160, 303, 93, 33);
 		addEditCustomer.add(btnClear);
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -141,29 +111,71 @@ public class CustomerUpdateUI extends JPanel {
 		btnClear.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		JButton btnNewButton = new JButton("Update");
-		btnNewButton.setBounds(303, 381, 124, 33);
+		btnNewButton.setBounds(302, 303, 124, 33);
 		addEditCustomer.add(btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//reading details from customer UI
-				String name = tfName.getText();
-				String address = tfAddress.getText();
-				String city = tfCity.getText();
-				int phoneNo = Integer.parseInt(tfPhoneNo.getText());
-				String email = tfEmail.getText();
-				java.sql.Date dateIn = new java.sql.Date(joinDate.getDate().getTime());
-				
-				//creating customer object
-				Customer customer = new Customer(name,address,city,phoneNo,email,dateIn);
-				
-				if(customer.saveNewCustomer()) {
-					clearFields();
+				if(!ComponentChecker.isFieldsEmpty(panelFields)) { //fields are not empty
+					if(Integer.valueOf(tfPhoneNo.getText()) >100000000 && Integer.valueOf(tfPhoneNo.getText()) < 999999999) { //checking whether contact number is 9 digits and correct
+						//reading details from customer UI and changing attributes in customer object
+						customer.setName(tfName.getText());
+						customer.setAddress(tfAddress.getText());
+						customer.setCity(tfCity.getText());
+						customer.setContactNumber(Integer.parseInt(tfPhoneNo.getText()));
+						customer.setEmail(tfEmail.getText());
+						int result = JOptionPane.showConfirmDialog(null, "Are you sure want to update " + customer.getName());
+						if(result == 0) { //yes selected
+							customer.updateCustomer();
+							customer = null;
+							populateTable();
+							clearFields();
+						}
+					} else { //phone number length is < 9
+						JOptionPane.showMessageDialog(null, "Enter correct contact number", "Warning", JOptionPane.WARNING_MESSAGE);
+					}
+				} else { //at least on of the field empty 
+					JOptionPane.showMessageDialog(null, "Fields Cannot be Empty", "Warning", JOptionPane.WARNING_MESSAGE);
 				}
-				populateTable();
 				
 			}
 		});
 		btnNewButton.setFont(new Font("Arial", Font.BOLD, 20));
+		
+		panelFields = new JPanel();
+		panelFields.setBackground(new Color(211, 211, 211));
+		panelFields.setBounds(125, 10, 313, 293);
+		addEditCustomer.add(panelFields);
+		panelFields.setLayout(null);
+		
+		tfEmail = new JTextField();
+		tfEmail.setBounds(18, 240, 295, 30);
+		panelFields.add(tfEmail);
+		tfEmail.setFont(new Font("Arial", Font.BOLD, 20));
+		tfEmail.setColumns(10);
+		
+		tfPhoneNo = new JTextField();
+		tfPhoneNo.setBounds(18, 186, 295, 30);
+		panelFields.add(tfPhoneNo);
+		tfPhoneNo.setFont(new Font("Arial", Font.BOLD, 20));
+		tfPhoneNo.setColumns(10);
+		
+		tfCity = new JTextField();
+		tfCity.setBounds(18, 133, 295, 30);
+		panelFields.add(tfCity);
+		tfCity.setFont(new Font("Arial", Font.BOLD, 20));
+		tfCity.setColumns(10);
+		
+		tfAddress = new JTextField();
+		tfAddress.setBounds(18, 76, 295, 30);
+		panelFields.add(tfAddress);
+		tfAddress.setFont(new Font("Arial", Font.BOLD, 20));
+		tfAddress.setColumns(10);
+
+		tfName = new JTextField();
+		tfName.setBounds(18, 20, 295, 30);
+		panelFields.add(tfName);
+		tfName.setFont(new Font("Arial", Font.BOLD, 20));
+		tfName.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Updating Customer Details");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -172,10 +184,25 @@ public class CustomerUpdateUI extends JPanel {
 		add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(204, 608, 792, 144);
+		scrollPane.setBounds(41, 608, 1114, 144);
 		add(scrollPane);
 		
-		table = new JTable();
+		table = new JTable() {
+			public  boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int tableRowSelected = table.getSelectedRow();
+				customer = new Customer();
+				int customerId= Integer.valueOf(String.valueOf(table.getValueAt(tableRowSelected, 0)));
+				customer.setId(customerId);
+				customer = customer.getCustomerDetails(customerId);
+				populateFieldForEditing(customer);
+			}
+		});
 		table.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		scrollPane.setViewportView(table);
 		populateTable();

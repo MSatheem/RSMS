@@ -11,6 +11,22 @@ public class CustomerList {
 	List<Customer> customerDetailList = new ArrayList<Customer>();
 	int numberOfCustomerRead = 0;
 
+	public void customerInfo() {
+		numberOfCustomerRead = 0;
+		customerDetailList.clear();
+		try {
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT id FROM customer WHERE id > 1");
+			ResultSet rst = pst.executeQuery();
+			while (rst.next()) {
+				Customer customer = new Customer().getCustomerDetails(rst.getInt(1));
+				customerDetailList.add(customer);
+				numberOfCustomerRead++;	
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void customerInfo(int searchKey) {
 		numberOfCustomerRead = 0;
 		customerDetailList.clear();
@@ -26,7 +42,7 @@ public class CustomerList {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public Object[][] tableArray() {
 		Object[][] objects = new Object[numberOfCustomerRead][3];
 		for (int i = 0; i < numberOfCustomerRead; i++) {

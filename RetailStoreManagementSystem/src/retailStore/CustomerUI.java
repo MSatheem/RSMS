@@ -26,6 +26,7 @@ public class CustomerUI extends JPanel {
 	private JDateChooser joinDate;
 	private Date dateToday;
 	DefaultTableModel model;
+	CustomerListTable customerListTable;
 	
 	private void clearFields() {
 		tfName.setText("");
@@ -34,12 +35,6 @@ public class CustomerUI extends JPanel {
 		tfPhoneNo.setText("");
 		tfEmail.setText("");
 		joinDate.setDate(dateToday);
-	}
-	
-	private void populateTable() {
-		Customer c = new Customer();
-		String name[] = {"Id","Name","Address","City","ContactNumber","Email","Join Date"};
-		model = new DefaultTableModel(c.populateCustomerTable(),name);
 	}
 	
 	/**
@@ -139,18 +134,27 @@ public class CustomerUI extends JPanel {
 				String name = tfName.getText();
 				String address = tfAddress.getText();
 				String city = tfCity.getText();
-				int phoneNo = Integer.parseInt(tfPhoneNo.getText());
 				String email = tfEmail.getText();
 				java.sql.Date dateIn = new java.sql.Date(joinDate.getDate().getTime());
-				
-				//creating customer object
-				Customer customer = new Customer(name,address,city,phoneNo,email,dateIn);
-				int result = JOptionPane.showConfirmDialog(btnSave, "Are you sure want to save " + customer.getName() + "," + customer.getContactNumber());
-				if(result == 1) {
-					customer.saveNewCustomer();
-					clearFields();
+				if(!tfName.getText().isBlank() || !tfAddress.getText().isBlank() || !tfCity.getText().isBlank() || !tfEmail.getText().isBlank()) {
+					if(Integer.valueOf(tfPhoneNo.getText()) >100000000 && Integer.valueOf(tfPhoneNo.getText()) < 999999999) {
+						//creating customer object
+						int phoneNo = Integer.parseInt(tfPhoneNo.getText());
+						Customer customer = new Customer(name,address,city,phoneNo,email,dateIn);
+						int result = JOptionPane.showConfirmDialog(btnSave, "Are you sure want to save " + customer.getName() + "," + customer.getContactNumber());
+						if(result == 0) { //yes selected
+							customer.saveNewCustomer(); //saving customer
+							customer = null;
+							clearFields();
+							customerListTable.populateTable();
+						}	
+					} else {
+						JOptionPane.showMessageDialog(null, "Enter correct contact number", "Warning", JOptionPane.WARNING_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Fields Cannot be Empty", "Warning", JOptionPane.WARNING_MESSAGE);
 				}
-				populateTable();	
+				
 			}
 		});
 		btnSave.setFont(new Font("Arial", Font.BOLD, 20));
@@ -173,9 +177,8 @@ public class CustomerUI extends JPanel {
 		lblNewLabel_1.setBounds(552, 61, 92, 24);
 		add(lblNewLabel_1);
 		
-		CustomerListTable customerListTable = new CustomerListTable();
+		customerListTable = new CustomerListTable();
 		customerListTable.setBounds(734, 221, 319, 324);
 		add(customerListTable);
-		populateTable();
 	}
 }
