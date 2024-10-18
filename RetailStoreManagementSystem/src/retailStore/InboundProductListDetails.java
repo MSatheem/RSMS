@@ -36,7 +36,7 @@ public class InboundProductListDetails {
 		inboundProductReadList.clear();
 		numberOfDataRead = 0;
 		try {
-			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT date, logNo FROM inbound WHERE logNo = (SELECT logNo FROM inbound_product WHERE productId = ? AND quantityInStock > 0)");
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT date, logNo FROM inbound WHERE logNo IN (SELECT logNo FROM inbound_product WHERE productId = ? AND quantityInStock > 0)");
 			pst.setInt(1, productId);
 			ResultSet rst = pst.executeQuery();
 			while(rst.next()) {
