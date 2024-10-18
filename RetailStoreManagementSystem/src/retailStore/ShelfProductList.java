@@ -1,7 +1,5 @@
 package retailStore;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,8 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 public class ShelfProductList {
-	Connection con;
-	
 	private Date date;
 	private int logNo;
 	private int count=0;
@@ -36,21 +32,20 @@ public class ShelfProductList {
 	//saving to database
 	public void saveList() {
 		//reduce amount from in bound table quantity
-		connectToDatabase();
 		PreparedStatement pst,pst2;
 		ResultSet rst;
 		java.sql.Date dateToSave = new java.sql.Date(date.getTime());
 		
 		try {
-			pst = con.prepareStatement("INSERT INTO shelf(date) VALUES(?)");
+			pst = DataBaseConnection.con.prepareStatement("INSERT INTO shelf(date) VALUES(?)");
 			pst.setDate(1, dateToSave);
 			pst.execute();
 			
-			pst = con.prepareStatement("SELECT LAST_INSERT_ID();");
+			pst = DataBaseConnection.con.prepareStatement("SELECT LAST_INSERT_ID();");
 			rst = pst.executeQuery();
 			if(rst.next()) {
 				logNo = rst.getInt(1);
-				pst2 = con.prepareStatement("INSERT INTO shelf_product (logNo, productId, batchNo,inboundLogNo,salePrice, quantity, quantityInShelf) VALUES (?, ?, ?, ?, ?, ?,?) ");
+				pst2 = DataBaseConnection.con.prepareStatement("INSERT INTO shelf_product (logNo, productId, batchNo,inboundLogNo,salePrice, quantity, quantityInShelf) VALUES (?, ?, ?, ?, ?, ?,?) ");
 				for(int i=0; i<count; i++) {
 					//saving the in bound list to database
 					pst2.setInt(1, logNo);
@@ -64,36 +59,20 @@ public class ShelfProductList {
 					shelfList.get(i).updateQuantity();
 					pst2.execute();
 				}
-				
-				//updating quantity in inbound_product table 
-				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		closeConnection();
-		//
 	}
 	
-	//establishing connection to database
-			private void connectToDatabase() {
-				try {
-					Class.forName("com.mysql.cj.jdbc.Driver");
-					con = DriverManager.getConnection("jdbc:mysql://localhost:3306/rsms","root","");
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+	public Object[][] tableArray() {
+		Object[][] obj = new Object[shelfList.size()][3];
+		for(int i=0; i< shelfList.size(); i++) {
+			obj[i][0] = shelfList.get(i).getId();
+			obj[i][1] = shelfList.get(i).getName();
+			obj[i][2] = shelfList.get(i).getBatchNo();
 			
-			//closing connection to database
-			private void closeConnection() {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-	
+		}
+		return  obj;
+	}
 }
