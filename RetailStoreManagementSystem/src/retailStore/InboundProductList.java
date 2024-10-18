@@ -131,6 +131,31 @@ public class InboundProductList {
 		}
 	}
 	
+	public void retrieveInboundDetails(int productId) {
+		//date,logNo from in bound and poductId, purchasePrice,batchNo,mfgDate,expDate,quantityIOnstock from in bound product
+		connectToDatabase();
+		PreparedStatement pst;
+		ResultSet rst;
+		
+		try {
+			pst = con.prepareStatement("SELECT productId, purchasePrice, batchNo, mfgDate, expDate, quantityInStock from inbound_product WHERE logNo = ? AND productId = ? AND quantityInStock >0");
+			pst.setInt(1, logNo);
+			pst.setInt(2, productId);
+			rst = pst.executeQuery();
+			while(rst.next()) {//not empty
+				InboundProduct product = new InboundProduct(rst.getInt(1));
+				product.setPurchasePrice(rst.getDouble(2));
+				product.setBatchNo(rst.getInt(3));
+				product.setMfgDate(rst.getDate(4));
+				product.setExpDate(rst.getDate(5));
+				product.setQuantityInStore(rst.getInt(6));
+				productList.add(product);
+				numberOfInboundProducts++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	//establishing connection to database
 		private void connectToDatabase() {
 			try {
