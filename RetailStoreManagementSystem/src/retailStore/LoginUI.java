@@ -22,8 +22,8 @@ public class LoginUI extends JPanel {
 	private Users user;
 	
 	public void clearFields() {
-		tfUserName.setText("");
-		passwordField.setText("");
+		tfUserName.setText(null);
+		passwordField.setText(null);
 	}
 	
 	/**
@@ -63,6 +63,7 @@ public class LoginUI extends JPanel {
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		JButton btnClear = new JButton("Clear");
+		btnClear.setForeground(Color.RED);
 		btnClear.setBounds(119, 207, 87, 33);
 		panel.add(btnClear);
 		btnClear.addActionListener(new ActionListener() {
@@ -73,13 +74,13 @@ public class LoginUI extends JPanel {
 		btnClear.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		JButton btnLogin = new JButton("Login");
-		btnLogin.setBounds(325, 207, 105, 33);
+		btnLogin.setForeground(Color.BLUE);
+		btnLogin.setBounds(324, 207, 105, 33);
 		panel.add(btnLogin);
 		btnLogin.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				mainWindow.loginSuccessfull();
-				/*if(!tfUserName.getText().isBlank() & !passwordField.getPassword().toString().isBlank()) {
+				if(!tfUserName.getText().isBlank() & !passwordField.getPassword().toString().isBlank()) {
 					String userName = tfUserName.getText();
 					String password = passwordField.getText();
 					user = new Users(userName, password);
@@ -92,7 +93,7 @@ public class LoginUI extends JPanel {
 					JOptionPane.showMessageDialog(null, "Fields Cannot be empty", "Warning", JOptionPane.WARNING_MESSAGE);
 				}
 				user = null;
-				clearFields();*/
+				clearFields();
 			}
 		});
 		btnLogin.setFont(new Font("Arial", Font.BOLD, 20));
