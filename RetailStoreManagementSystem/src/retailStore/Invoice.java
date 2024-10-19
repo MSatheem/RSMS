@@ -34,15 +34,31 @@ public class Invoice {
 
 	public void add(InvoiceProduct invoiceProduct) {
 		setTotal(getTotal() + invoiceProduct.getTotalPrice());
+		if(!invoiceProductMatch(invoiceProduct)) { //if the product not already in the list add the product to list
+			invoiceProductList.add(invoiceProduct);
+		}
 		setNumberOfProducts(getNumberOfProducts() + invoiceProduct.getQuantity()); 
-		invoiceProductList.add(invoiceProduct);
 	}
 	
+	public void addInvoiceProductRead(InvoiceProduct invoiceProduct) {
+		setNumberOfProducts(getNumberOfProducts() + invoiceProduct.getQuantity()); 
+		setTotal(getTotal() + invoiceProduct.getTotalPrice());
+		invoiceProductList.add(invoiceProduct);
+	}
 	public void remove(InvoiceProduct invoiceProduct) {
 	
 	}
 	
-	
+	private boolean invoiceProductMatch(InvoiceProduct invoiceProduct) { //checking whether same product already in the list
+		for(int i=0; i<invoiceProductList.size(); i++) {
+			InvoiceProduct productInList = invoiceProductList.get(i);
+			if(productInList.getId() == invoiceProduct.getId() && productInList.getBatchNo() == invoiceProduct.getBatchNo() && productInList.getSalePrice() == invoiceProduct.getSalePrice())  { //match found
+				productInList.setQuantity(productInList.getQuantity() + invoiceProduct.getQuantity());
+				return true;
+			}
+		}
+		return false;
+	}
 	public Object[][] tableArray() {
 		Object[][] obj = new Object[invoiceProductList.size()][6];
 		for(int i=0; i<invoiceProductList.size(); i++) {
@@ -51,6 +67,7 @@ public class Invoice {
 			obj[i][2] = invoiceProductList.get(i).getBatchNo();
 			obj[i][3] = invoiceProductList.get(i).getPrice();
 			obj[i][4] = invoiceProductList.get(i).getSalePercentage();
+			obj[i][5] = invoiceProductList.get(i).getQuantity();
 		}
 		return obj;
 	}
@@ -138,7 +155,7 @@ public class Invoice {
 					invoiceProduct.setDiscount(rst2.getDouble(5));
 					invoiceProduct.setBatchNo(rst2.getInt(6));
 					invoiceProduct.setTotalPrice(rst2.getDouble(7));
-					add(invoiceProduct);
+					addInvoiceProductRead(invoiceProduct);
 				}
 			}
 		} catch (SQLException e) {
