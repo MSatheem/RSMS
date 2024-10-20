@@ -106,6 +106,7 @@ public class InvoiceUI extends JPanel {
 					textFieldPrice.setText(String.valueOf(invoiceProduct.getPrice()));
 					invoiceProduct.setLogNo(shelfProductDetail.shelfProductDetailList.get(shelfTableRowSelected).getLogNo());
 					invoiceProduct.setQuantityInShelf(shelfProductDetail.shelfProductDetailList.get(shelfTableRowSelected).getQuantityInShelf());
+					btnAdd.setEnabled(true);
 				}
 			}
 		});
@@ -132,6 +133,9 @@ public class InvoiceUI extends JPanel {
 				invoice = new Invoice();
 				invoiceProduct = null;
 				btnAdd.setEnabled(false);
+				customer = customer.getCustomerDetails(1);
+				tfCustomerInfo.setText(customer.getId() + " "+ customer.getName());
+				invoice.setCustomerId(customer.getId());
 			}
 		});
 		btnClear.setBounds(749, 626, 104, 39);
@@ -175,7 +179,7 @@ public class InvoiceUI extends JPanel {
 		tfTotalPrice = new JTextField();
 		tfTotalPrice.setHorizontalAlignment(SwingConstants.RIGHT);
 		tfTotalPrice.setFont(new Font("Tahoma", Font.BOLD, 20));
-		tfTotalPrice.setBounds(884, 419, 116, 39);
+		tfTotalPrice.setBounds(884, 419, 203, 39);
 		add(tfTotalPrice);
 		tfTotalPrice.setColumns(10);
 		
@@ -318,7 +322,7 @@ public class InvoiceUI extends JPanel {
 		tfCustomerInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		tfCustomerInfo.setFont(new Font("Tahoma", Font.BOLD, 20));
 		tfCustomerInfo.setColumns(10);
-		tfCustomerInfo.setBounds(884, 505, 116, 39);
+		tfCustomerInfo.setBounds(884, 505, 203, 39);
 		add(tfCustomerInfo);
 		tfCustomerInfo.setText(customer.getId() + " "+ customer.getName());
 		
@@ -332,6 +336,7 @@ public class InvoiceUI extends JPanel {
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_4.setBounds(576, 20, 142, 59);
 		add(lblNewLabel_4);
+		btnAdd.setEnabled(false);
 		populateTableCustomer(-1);
 	}
 }
