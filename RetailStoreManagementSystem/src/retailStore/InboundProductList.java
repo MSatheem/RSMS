@@ -113,7 +113,7 @@ public class InboundProductList {
 		ResultSet rst;
 		
 		try {
-			pst = con.prepareStatement("SELECT productId, purchasePrice, batchNo, mfgDate, expDate, quantityInStock from inbound_product WHERE logNo = ?");
+			pst = con.prepareStatement("SELECT productId, purchasePrice, batchNo, mfgDate, expDate, quantityInStock from inbound_product WHERE logNo = ? AND quantityInStock > 0");
 			pst.setInt(1, logNo);
 			rst = pst.executeQuery();
 			while(rst.next()) {//not empty
