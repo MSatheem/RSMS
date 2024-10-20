@@ -13,10 +13,6 @@ public class ReturnProduct extends InvoiceProduct {
 	public ReturnProduct(int productId) {
 		super(productId);
 	}
-
-	public void save() {
-		
-	}
 	
 	public int getInvoiceNumber() {
 		return invoiceNumber;
@@ -67,7 +63,6 @@ public class ReturnProduct extends InvoiceProduct {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		return -1;
 	}
 	
@@ -83,16 +78,18 @@ public class ReturnProduct extends InvoiceProduct {
 			pst.setInt(5, quantityOfReturn);
 			pst.setDate(6, dateToSave);
 			pst.execute();
-			
 			updateShelfQuantityReturn();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 	}
-
+	
+	
+	
 	public void setDate(java.util.Date date) {
 		this.date = new java.util.Date(date.getTime());
 	}
 
+	
+	
 }
