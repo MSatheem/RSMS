@@ -23,8 +23,7 @@ public class StoreToShelfUI extends JPanel {
 	private JTable tableStorage;
 	DefaultTableModel modelStore, modelShelf;
 	private JScrollPane scrollPane;
-	DefaultComboBoxModel<String> modelComboBox;
-	DefaultComboBoxModel<String> modelComboBox1;
+	DefaultComboBoxModel<String> modelComboBox, modelComboBox1;
 	private JLabel lblNewLabel_1;
 	InboundProductList productList;
 	Supplier[] supplier;
@@ -33,16 +32,13 @@ public class StoreToShelfUI extends JPanel {
 	private JTable tableShelf;
 	private JTextField tfSellingPrice;
 	private JLabel lblNewLabel_3;
-	private JTextField tfQuantity;
-	private JTextField tFId;
-	private JTextField tFPurchasePrice;
+	private JTextField tfQuantity, tFId, tFPurchasePrice, tFBatchNo;
 	Object[][] storage;
-	private ShelfProductList shelfProductList =  new ShelfProductList();
+	private ShelfProductList shelfProductList;
 	ShelfProduct shelfProduct =  new ShelfProduct();
 	private JLabel lblNewLabel_2_2;
 	private JTextField tFLogNo;
 	private JLabel lblNewLabel_3_2;
-	private JTextField tFBatchNo;
 	JDateChooser dateChooser;
 	private JPanel panel;
 	private ShelfListTable shelfListTable;
@@ -52,13 +48,10 @@ public class StoreToShelfUI extends JPanel {
 		storage = inboundProductListDetails.tableArrayAll(productId);
 		String productStored[] = {"Date","LogNo","Id","Name","Batch","Mfg Date","Exp Date","Quantity","Price"};
 		modelStore = new DefaultTableModel(inboundProductListDetails.tableArrayAll(productId),productStored);
-		tableStorage.getColumnModel().getColumn(3).setPreferredWidth(200);
 		tableStorage.setModel(modelStore);
+		tableStorage.getColumnModel().getColumn(3).setPreferredWidth(200);
 	}
 	
-	//populating table with product id or name value
-	
-	//
 	private void populateShelfTable() {
 		String productToShelf[] = {"Id","Name","BatchNo", "Purchase", "quantity","sellingPrice"};
 		modelShelf =  new DefaultTableModel(shelfProductList.tableArray(), productToShelf);
@@ -69,6 +62,11 @@ public class StoreToShelfUI extends JPanel {
 		shelfListTable = new ShelfListTable();
 		shelfListTable.setBounds(0, 0, 401, 511);
 		panel.add(shelfListTable);
+	}
+	
+	private void clearFields() {
+		tFLogNo.setText(null);
+		
 	}
 	/**
 	 * Create the panel.
@@ -81,7 +79,7 @@ public class StoreToShelfUI extends JPanel {
 		shelfProductList = new ShelfProductList();
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(39, 111, 618, 216);
+		scrollPane.setBounds(39, 111, 687, 216);
 		add(scrollPane);
 		
 		tableStorage = new JTable();
@@ -151,6 +149,7 @@ public class StoreToShelfUI extends JPanel {
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				shelfProductList =  new ShelfProductList();
 				//add product to list and showing in the table
 				ShelfProduct shelfProduct = new ShelfProduct();
 				shelfProduct.setId(Integer.parseInt(tFId.getText()));
@@ -175,6 +174,9 @@ public class StoreToShelfUI extends JPanel {
 				populateTable(-1);
 				//load updated shelf list
 				shelfListTable();
+				shelfProductList = null;
+				shelfProductList = new ShelfProductList(); //creating object for next invoice
+				populateShelfTable();
 			}
 		});
 		btnAdd_1.setBounds(572, 652, 85, 21);
@@ -217,6 +219,11 @@ public class StoreToShelfUI extends JPanel {
 		add(tFPurchasePrice);
 		
 		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnClear.setBounds(434, 652, 85, 21);
 		add(btnClear);
 		
