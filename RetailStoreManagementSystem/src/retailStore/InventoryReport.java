@@ -8,6 +8,9 @@ public class InventoryReport {
 	Product[] product;
 	int yearSelected, monthSelected;
 	
+	public InventoryReport() {
+	}
+	
 	public InventoryReport(int yearSelected, int monthSelected) {
 		this.yearSelected = yearSelected;
 		this.monthSelected = monthSelected;
