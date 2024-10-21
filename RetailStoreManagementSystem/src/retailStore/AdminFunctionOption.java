@@ -34,6 +34,7 @@ public class AdminFunctionOption extends JPanel {
 	private ManageUserAccountsUI manageUserAccountsUI;
 	private InventoryReportUI inventoryReportUI;
 	private CustomerUpdateUI customerUpdateUI;
+	private CheckInventoryUI checkInventoryUI;
 	/**
 	 * Create the panel.
 	 */
@@ -53,6 +54,7 @@ public class AdminFunctionOption extends JPanel {
 		manageUserAccountsUI = null;
 		inventoryReportUI = null;
 		customerUpdateUI = null;
+		checkInventoryUI = null;
 		panel.removeAll();
 		panel.setVisible(false);
 	}
@@ -164,6 +166,14 @@ public class AdminFunctionOption extends JPanel {
 		Inventory.add(mntmNewMenuItem_1_2);
 		
 		JMenuItem mntmCheck = new JMenuItem("Check");
+		mntmCheck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				checkInventoryUI = new CheckInventoryUI();
+				panel.add(checkInventoryUI);
+				panel.setVisible(true);
+			}
+		});
 		mntmCheck.setBackground(new Color(152, 251, 152));
 		mntmCheck.setHorizontalAlignment(SwingConstants.LEFT);
 		mntmCheck.setFont(new Font("Segoe UI", Font.PLAIN, 18));
