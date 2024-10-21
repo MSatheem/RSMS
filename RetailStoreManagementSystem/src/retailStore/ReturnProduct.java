@@ -30,13 +30,13 @@ public class ReturnProduct extends InvoiceProduct {
 		this.quantityOfReturn = qunatityOfReturn;
 	}
 	
-	private void updateShelfQuantityReturn() {
-		if(readQuantityInShelf() > -1) {
+	private void updateQuantityReturn() {
+		if(readQuantityInStore() > -1) { //checking whether item exist in table
 			PreparedStatement pst;
 			
 			try {
-				pst = DataBaseConnection.con.prepareStatement("UPDATE shelf_product SET quantityInShelf = ? WHERE inboundLogNo = ? AND productId = ? AND batchNo = ?");
-				pst.setInt(1, readQuantityInShelf() + quantityOfReturn);
+				pst = DataBaseConnection.con.prepareStatement("UPDATE inbound_product SET quantityInStock = ? WHERE logNo = ? AND productId = ? AND batchNo = ?");
+				pst.setInt(1, readQuantityInStore() + quantityOfReturn);
 				pst.setInt(2, getInboundLogNo());
 				pst.setInt(3, getId());
 				pst.setInt(4, getBatchNo());
@@ -47,11 +47,11 @@ public class ReturnProduct extends InvoiceProduct {
 		}
 	}
 	
-	private int readQuantityInShelf() {
+	private int readQuantityInStore() {
 		PreparedStatement pst;
 		ResultSet rst;
 		try {
-			pst = DataBaseConnection.con.prepareStatement("SELECT quantityInShelf FROM shelf_product WHERE productId = ? AND batchNo = ? AND inboundLogNo = ?" );
+			pst = DataBaseConnection.con.prepareStatement("SELECT quantityInStock FROM inbound_product WHERE productId = ? AND batchNo = ? AND logNo = ?" );
 			pst.setInt(1, getId());
 			pst.setInt(2, getBatchNo());
 			pst.setInt(3, getInboundLogNo());
@@ -63,7 +63,7 @@ public class ReturnProduct extends InvoiceProduct {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return -1;
+		return -1; //no items found in the table
 	}
 	
 	public void saveReturn() {
@@ -78,7 +78,7 @@ public class ReturnProduct extends InvoiceProduct {
 			pst.setInt(5, quantityOfReturn);
 			pst.setDate(6, dateToSave);
 			pst.execute();
-			updateShelfQuantityReturn();
+			updateQuantityReturn();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
