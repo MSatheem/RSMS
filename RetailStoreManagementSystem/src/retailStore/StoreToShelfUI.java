@@ -53,7 +53,7 @@ public class StoreToShelfUI extends JPanel {
 	}
 	
 	private void populateShelfTable() {
-		String productToShelf[] = {"Id","Name","BatchNo", "Purchase", "quantity","sellingPrice"};
+		String productToShelf[] = {"Id","BatchNo", "Purchase", "quantity","sellingPrice"};
 		modelShelf =  new DefaultTableModel(shelfProductList.tableArray(), productToShelf);
 		tableShelf.setModel(modelShelf);
 	}
@@ -66,7 +66,11 @@ public class StoreToShelfUI extends JPanel {
 	
 	private void clearFields() {
 		tFLogNo.setText(null);
-		
+		tFBatchNo.setText(null);
+		tFId.setText(null);
+		tFPurchasePrice.setText(null);
+		tfQuantity.setText(null);
+		tfSellingPrice.setText(null);
 	}
 	/**
 	 * Create the panel.
@@ -157,8 +161,10 @@ public class StoreToShelfUI extends JPanel {
 				shelfProduct.setInboundLogNo(Integer.parseInt(tFLogNo.getText()));
 				shelfProduct.setSalePrice(Integer.parseInt(tfSellingPrice.getText()));
 				shelfProduct.setQuantityMovedToShelf(Integer.valueOf(tfQuantity.getText()));
+				shelfProduct.setPurchasePrice(Double.parseDouble(tFPurchasePrice.getText()));
 				shelfProductList.add(shelfProduct);
 				populateShelfTable();
+				clearFields();
 			}
 		});
 		btnAdd.setBounds(572, 416, 85, 21);
@@ -177,6 +183,7 @@ public class StoreToShelfUI extends JPanel {
 				shelfProductList = null;
 				shelfProductList = new ShelfProductList(); //creating object for next invoice
 				populateShelfTable();
+				clearFields();
 			}
 		});
 		btnAdd_1.setBounds(572, 652, 85, 21);
@@ -221,7 +228,12 @@ public class StoreToShelfUI extends JPanel {
 		JButton btnClear = new JButton("Clear");
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				clearFields();
+				shelfProductList = null;
+				shelfProductList = new ShelfProductList(); //creating object for next invoice
+				populateShelfTable();
+				populateTable(-1);
+				clearFields();
 			}
 		});
 		btnClear.setBounds(434, 652, 85, 21);

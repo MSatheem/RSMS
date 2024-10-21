@@ -66,12 +66,13 @@ public class ShelfProductList {
 	}
 	
 	public Object[][] tableArray() {
-		Object[][] obj = new Object[shelfList.size()][3];
+		Object[][] obj = new Object[shelfList.size()][5];
 		for(int i=0; i< shelfList.size(); i++) {
 			obj[i][0] = shelfList.get(i).getId();
-			obj[i][1] = shelfList.get(i).getName();
-			obj[i][2] = shelfList.get(i).getBatchNo();
-			
+			obj[i][1] = shelfList.get(i).getBatchNo();
+			obj[i][2] = shelfList.get(i).getPurchasePrice();
+			obj[i][3] = shelfList.get(i).getQuantityMovedToShelf();
+			obj[i][4] = shelfList.get(i).getSalePrice();			
 		}
 		return  obj;
 	}
