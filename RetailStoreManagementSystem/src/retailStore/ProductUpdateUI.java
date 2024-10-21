@@ -5,6 +5,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -16,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.SwingConstants;
 
 
 public class ProductUpdateUI extends JPanel {
@@ -58,12 +61,9 @@ public class ProductUpdateUI extends JPanel {
 			try { //number only allowed
 				id = Integer.valueOf(tfSupplierId.getText());
 				supplier.setId(id);
-				if(supplier.isSaved()) {
-					supplier = supplier.getSuppilerDetail();
-					tfSupplierName.setText(supplier.getName());
-				} else {
-					tfSupplierName.setText("");
-				}
+				supplier = supplier.getSuppilerDetail();
+				tfSupplierName.setText(supplier.getName());
+				
 			} catch (NumberFormatException e1) {
 				tfSupplierName.setText("");
 				System.out.println(e1);
@@ -77,13 +77,15 @@ public class ProductUpdateUI extends JPanel {
 	 */
 	@SuppressWarnings("serial")
 	public ProductUpdateUI() {
+		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
-		setBounds(1, 1, 1000, 700);
+		setBounds(2, 2, 1197, 766);
 		
 		JPanel addEditCustomer_1 = new JPanel();
+		addEditCustomer_1.setBackground(Color.PINK);
 		addEditCustomer_1.setLayout(null);
 		addEditCustomer_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		addEditCustomer_1.setBounds(275, 111, 450, 305);
+		addEditCustomer_1.setBounds(373, 111, 450, 305);
 		add(addEditCustomer_1);
 		
 		JLabel lblNewLabel_1 = new JLabel("Name :");
@@ -103,6 +105,7 @@ public class ProductUpdateUI extends JPanel {
 		addEditCustomer_1.add(tfProductName);
 		
 		tfSupplierId = new JTextField();
+		tfSupplierId.setEditable(false);
 		tfSupplierId.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -115,21 +118,26 @@ public class ProductUpdateUI extends JPanel {
 		addEditCustomer_1.add(tfSupplierId);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.PINK);
 		panel_1.setLayout(null);
 		panel_1.setBounds(122, 203, 295, 62);
 		addEditCustomer_1.add(panel_1);
 		
 		JButton btnNewButton_1 = new JButton("Update");
+		btnNewButton_1.setForeground(Color.RED);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String productName = tfProductName.getText();
-				int id = Integer.valueOf(tfSupplierId.getText());
-				if(!tfSupplierName.getText().contentEquals("")) {
+				if(!tfProductName.getText().contentEquals("")) {
 					product.setName(productName);
-					product.setSupplierId(id);
-					product.update();
-					populateProductDetailTable();
-					clearFields();
+					int result = JOptionPane.showConfirmDialog(null, "Are you sure want to save " + product.getName());
+					if(result == 0) { //yes selected
+						product.update(); //updating product
+						populateProductDetailTable();
+						clearFields();
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Fields Cannot be Empty", "Warning", JOptionPane.WARNING_MESSAGE); 
 				}
 			}
 		});
@@ -138,6 +146,7 @@ public class ProductUpdateUI extends JPanel {
 		panel_1.add(btnNewButton_1);
 		
 		JButton btnClear_1 = new JButton("Clear");
+		btnClear_1.setForeground(Color.BLUE);
 		btnClear_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clearFields();
@@ -148,18 +157,20 @@ public class ProductUpdateUI extends JPanel {
 		panel_1.add(btnClear_1);
 		
 		tfSupplierName = new JTextField();
-		tfSupplierName.setEnabled(false);
+		tfSupplierName.setEditable(false);
 		tfSupplierName.setFont(new Font("Arial", Font.BOLD, 20));
 		tfSupplierName.setColumns(10);
 		tfSupplierName.setBounds(238, 81, 202, 30);
 		addEditCustomer_1.add(tfSupplierName);
 		
-		JLabel lblNewLabel_2 = new JLabel("Product");
-		lblNewLabel_2.setBounds(477, 49, 45, 13);
+		JLabel lblNewLabel_2 = new JLabel("Edit Product");
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 19));
+		lblNewLabel_2.setBounds(525, 49, 146, 33);
 		add(lblNewLabel_2);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(92, 465, 815, 185);
+		scrollPane.setBounds(191, 465, 815, 265);
 		add(scrollPane);
 		
 		table = new JTable() {
@@ -167,6 +178,7 @@ public class ProductUpdateUI extends JPanel {
 				return false;
 			}
 		};
+		table.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

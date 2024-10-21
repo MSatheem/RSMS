@@ -28,7 +28,7 @@ public class ShelfProductDetail{
 	
 	private void readShelfProductTable(int id) {
 		try {
-			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT logNo,inboundLogNo, batchNo, salePrice, salePercentage, quantityInShelf FROM shelf_product WHERE productId = ? AND quantity>0");
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT logNo,inboundLogNo, batchNo, salePrice, salePercentage, quantityInShelf FROM shelf_product WHERE productId = ? AND quantityInShelf >0");
 			pst.setInt(1, id);
 			ResultSet rst = pst.executeQuery();
 			while(rst.next()) {

@@ -28,7 +28,7 @@ public class SalesNode {
 			pst = DataBaseConnection.con.prepareStatement("SELECT productId, inboundLogNo, batchNo, quantity FROM return_product WHERE invoiceNumber = ?");
 			pst.setInt(1, invoice.getInvoiceNumber());
 			rst = pst.executeQuery();
-			if(rst.next()) {
+			while(rst.next()) {
 				ReturnProduct returnProduct = new ReturnProduct(rst.getInt(1));
 				returnProduct.setInboundLogNo(rst.getInt(2));
 				returnProduct.setBatchNo(rst.getInt(3));

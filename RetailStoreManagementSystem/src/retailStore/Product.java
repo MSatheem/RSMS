@@ -135,11 +135,6 @@ public class Product {
 		}
 		return null;
 	}
-	
-	@Override
-	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", supplierId=" + supplierId + "]";
-	}
 
 	// 2d object Array for table population
 	public Object[][] populateProductTable() {

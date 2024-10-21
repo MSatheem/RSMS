@@ -13,29 +13,29 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 @SuppressWarnings("serial")
-public class CustomerListTable extends JPanel {
+public class ProductListTable extends JPanel {
 	private static JTable table;
 	static String product[][];
 	private JTextField textFieldSearch;
-	CustomerList customerList = new CustomerList();
+	ProductList productList = new ProductList();
 	
 	public void populateTable(Object[][] obj) {
-		String cName[] = { "ID", "Name", "ContactNo" };
+		String cName[] = { "ID", "Name", "SupplierID" };
 		DefaultTableModel model = new DefaultTableModel(obj, cName);
 		table.setModel(model);
 		table.getColumnModel().getColumn(0).setPreferredWidth(8);
-		table.getColumnModel().getColumn(1).setPreferredWidth(40);
-		table.getColumnModel().getColumn(2).setPreferredWidth(40);
+		table.getColumnModel().getColumn(1).setPreferredWidth(80);
+		table.getColumnModel().getColumn(2).setPreferredWidth(8);
 		table.setRowHeight(30);
 	}
 	public void populateTable() {
-		customerList.customerInfo();
-		String cName[] = { "ID", "Name", "ContactNo" };
-		DefaultTableModel model = new DefaultTableModel(customerList.tableArray(), cName);
+		productList.productInfo();
+		String cName[] = { "ID", "Name", "SupplierId" };
+		DefaultTableModel model = new DefaultTableModel(productList.tableArray(), cName);
 		table.setModel(model);
 		table.getColumnModel().getColumn(0).setPreferredWidth(8);
-		table.getColumnModel().getColumn(1).setPreferredWidth(40);
-		table.getColumnModel().getColumn(2).setPreferredWidth(40);
+		table.getColumnModel().getColumn(1).setPreferredWidth(80);
+		table.getColumnModel().getColumn(2).setPreferredWidth(8);
 		table.setRowHeight(30);
 	}
 	
@@ -43,13 +43,13 @@ public class CustomerListTable extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public CustomerListTable() {
+	public ProductListTable() {
 		setLayout(null);
-		setBounds(0, 0, 319, 325);
+		setBounds(0, 0, 481, 405);
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(10, 54, 299, 261);
+		scrollPane.setBounds(10, 54, 461, 341);
 		add(scrollPane);
 
 		table = new JTable();
@@ -59,10 +59,10 @@ public class CustomerListTable extends JPanel {
 		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		scrollPane.setViewportView(table);
 
-		JLabel lblNewLabel = new JLabel("Search Phone Number");
+		JLabel lblNewLabel = new JLabel("Search by name");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel.setBounds(10, 15, 165, 24);
+		lblNewLabel.setBounds(64, 15, 165, 30);
 		add(lblNewLabel);
 
 		textFieldSearch =  new JTextField();
@@ -72,12 +72,12 @@ public class CustomerListTable extends JPanel {
 				if (textFieldSearch.getText().isEmpty()) {
 					populateTable();
 				} else {
-					customerList.customerInfo(Integer.parseInt(textFieldSearch.getText()));
-					populateTable(customerList.tableArray());
+					productList.productInfo(textFieldSearch.getText());
+					populateTable(productList.tableArray());
 				}
 			}
 		});
-		textFieldSearch.setBounds(185, 15, 124, 30);
+		textFieldSearch.setBounds(293, 15, 124, 30);
 		add(textFieldSearch);
 		textFieldSearch.setColumns(10);
 		populateTable();

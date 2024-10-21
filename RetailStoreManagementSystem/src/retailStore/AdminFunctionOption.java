@@ -9,6 +9,8 @@ import javax.swing.JMenuItem;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.LineBorder;
+import java.awt.Insets;
 
 public class AdminFunctionOption extends JPanel {
 
@@ -31,6 +33,8 @@ public class AdminFunctionOption extends JPanel {
 	private EmployeeUpdateUI employeeUpdateUI;
 	private ManageUserAccountsUI manageUserAccountsUI;
 	private InventoryReportUI inventoryReportUI;
+	private CustomerUpdateUI customerUpdateUI;
+	private CheckInventoryUI checkInventoryUI;
 	/**
 	 * Create the panel.
 	 */
@@ -49,36 +53,41 @@ public class AdminFunctionOption extends JPanel {
 		employeeUpdateUI = null;
 		manageUserAccountsUI = null;
 		inventoryReportUI = null;
+		customerUpdateUI = null;
+		checkInventoryUI = null;
 		panel.removeAll();
 		panel.setVisible(false);
 	}
 	
 	public AdminFunctionOption() {
+		setBorder(new LineBorder(new Color(0, 0, 0), 3));
 		setBackground(new Color(255, 255, 255));
 		setLayout(null);
 		setBounds(0,0,1200, 800);
 
 		panel = new JPanel();
-		panel.setBounds(49, 41, 1100, 700);
+		panel.setBorder(new LineBorder(new Color(0, 0, 0), 3, true));
+		panel.setBounds(1, 34, 1197, 766);
 		add(panel);
 		panel.setLayout(null);
-		
-		JMenuItem menuItem = new JMenuItem("New menu item");
-		menuItem.setBounds(315, 10, 135, 26);
-		panel.add(menuItem);
 		panel.setVisible(false);
 		
 		JMenuBar menuBar = new JMenuBar();
+		menuBar.setForeground(Color.WHITE);
+		menuBar.setBackground(Color.BLACK);
+		menuBar.setMargin(new Insets(1, 1, 1, 1));
 		menuBar.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		menuBar.setBounds(0, 0, 603, 31);
+		menuBar.setBounds(3, 3, 603, 31);
 		add(menuBar);
 		
 		JMenu StoreMenu = new JMenu("Store");
+		StoreMenu.setForeground(Color.WHITE);
 		StoreMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		StoreMenu.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menuBar.add(StoreMenu);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Sales");
+		mntmNewMenuItem.setBackground(new Color(152, 251, 152));
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -92,6 +101,7 @@ public class AdminFunctionOption extends JPanel {
 		StoreMenu.add(mntmNewMenuItem);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Return");
+		mntmNewMenuItem_1.setBackground(new Color(152, 251, 152));
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -103,23 +113,14 @@ public class AdminFunctionOption extends JPanel {
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		StoreMenu.add(mntmNewMenuItem_1);
 		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Stock Shelf");
-		mntmNewMenuItem_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				menuSwitch();
-				shelfUI = new StoreToShelfUI();
-				panel.add(shelfUI);
-				panel.setVisible(true);
-			}
-		});
-		StoreMenu.add(mntmNewMenuItem_3);
-		
 		JMenu CustomerMenu = new JMenu("Customer");
+		CustomerMenu.setForeground(Color.WHITE);
 		CustomerMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		CustomerMenu.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menuBar.add(CustomerMenu);
 		
 		JMenuItem mntmAdd = new JMenuItem("Add");
+		mntmAdd.setBackground(new Color(152, 251, 152));
 		mntmAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -133,15 +134,26 @@ public class AdminFunctionOption extends JPanel {
 		CustomerMenu.add(mntmAdd);
 		
 		JMenuItem mntmNewMenuItem_1_1 = new JMenuItem("Edit");
+		mntmNewMenuItem_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				customerUpdateUI = new CustomerUpdateUI();
+				panel.add(customerUpdateUI);
+				panel.setVisible(true);
+			}
+		});
+		mntmNewMenuItem_1_1.setBackground(new Color(152, 251, 152));
 		mntmNewMenuItem_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		CustomerMenu.add(mntmNewMenuItem_1_1);
 		
 		JMenu Inventory = new JMenu("Inventory");
+		Inventory.setForeground(Color.WHITE);
 		Inventory.setHorizontalAlignment(SwingConstants.CENTER);
 		Inventory.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menuBar.add(Inventory);
 		
 		JMenuItem mntmNewMenuItem_1_2 = new JMenuItem("Inbound");
+		mntmNewMenuItem_1_2.setBackground(new Color(152, 251, 152));
 		mntmNewMenuItem_1_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -154,16 +166,40 @@ public class AdminFunctionOption extends JPanel {
 		Inventory.add(mntmNewMenuItem_1_2);
 		
 		JMenuItem mntmCheck = new JMenuItem("Check");
+		mntmCheck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				checkInventoryUI = new CheckInventoryUI();
+				panel.add(checkInventoryUI);
+				panel.setVisible(true);
+			}
+		});
+		mntmCheck.setBackground(new Color(152, 251, 152));
 		mntmCheck.setHorizontalAlignment(SwingConstants.LEFT);
 		mntmCheck.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		Inventory.add(mntmCheck);
 		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Stock Shelf");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				menuSwitch();
+				shelfUI = new StoreToShelfUI();
+				panel.add(shelfUI);
+				panel.setVisible(true);
+			}
+		});
+		mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		mntmNewMenuItem_3.setBackground(new Color(152, 251, 152));
+		Inventory.add(mntmNewMenuItem_3);
+		
 		JMenu mnProduct = new JMenu("Product");
+		mnProduct.setForeground(Color.WHITE);
 		mnProduct.setHorizontalAlignment(SwingConstants.CENTER);
 		mnProduct.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menuBar.add(mnProduct);
 		
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Add");
+		mntmNewMenuItem_2.setBackground(new Color(152, 251, 152));
 		mntmNewMenuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -177,6 +213,7 @@ public class AdminFunctionOption extends JPanel {
 		mnProduct.add(mntmNewMenuItem_2);
 		
 		JMenuItem mntmNewMenuItem_1_3 = new JMenuItem("Edit");
+		mntmNewMenuItem_1_3.setBackground(new Color(152, 251, 152));
 		mntmNewMenuItem_1_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -189,11 +226,13 @@ public class AdminFunctionOption extends JPanel {
 		mnProduct.add(mntmNewMenuItem_1_3);
 		
 		JMenu mnSupplier = new JMenu("Supplier");
+		mnSupplier.setForeground(Color.WHITE);
 		mnSupplier.setHorizontalAlignment(SwingConstants.CENTER);
 		mnSupplier.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menuBar.add(mnSupplier);
 		
 		JMenuItem mntmAddSupplier = new JMenuItem("Add");
+		mntmAddSupplier.setBackground(new Color(152, 251, 152));
 		mntmAddSupplier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -207,6 +246,7 @@ public class AdminFunctionOption extends JPanel {
 		mnSupplier.add(mntmAddSupplier);
 		
 		JMenuItem mntmNewMenuItem_1_4 = new JMenuItem("Edit");
+		mntmNewMenuItem_1_4.setBackground(new Color(152, 251, 152));
 		mntmNewMenuItem_1_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -219,10 +259,13 @@ public class AdminFunctionOption extends JPanel {
 		mnSupplier.add(mntmNewMenuItem_1_4);
 		
 		JMenu mnReport = new JMenu("Report");
+		mnReport.setForeground(Color.WHITE);
 		mnReport.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menuBar.add(mnReport);
 		
 		JMenuItem mntmSalesreport = new JMenuItem("SalesReport");
+		mntmSalesreport.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		mntmSalesreport.setBackground(new Color(152, 251, 152));
 		mntmSalesreport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -234,6 +277,8 @@ public class AdminFunctionOption extends JPanel {
 		mnReport.add(mntmSalesreport);
 		
 		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Inventory Report");
+		mntmNewMenuItem_6.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		mntmNewMenuItem_6.setBackground(new Color(152, 251, 152));
 		mntmNewMenuItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -245,10 +290,13 @@ public class AdminFunctionOption extends JPanel {
 		mnReport.add(mntmNewMenuItem_6);
 		
 		JMenu mnEmployee = new JMenu("Employee");
+		mnEmployee.setForeground(Color.WHITE);
 		mnEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menuBar.add(mnEmployee);
 		
 		JMenuItem mntmAddEmployee = new JMenuItem("Add");
+		mntmAddEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		mntmAddEmployee.setBackground(new Color(152, 251, 152));
 		mntmAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -260,6 +308,8 @@ public class AdminFunctionOption extends JPanel {
 		mnEmployee.add(mntmAddEmployee);
 		
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Update");
+		mntmNewMenuItem_4.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		mntmNewMenuItem_4.setBackground(new Color(152, 251, 152));
 		mntmNewMenuItem_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -271,10 +321,13 @@ public class AdminFunctionOption extends JPanel {
 		mnEmployee.add(mntmNewMenuItem_4);
 		
 		JMenu mnNewMenu = new JMenu("User");
+		mnNewMenu.setForeground(Color.WHITE);
 		mnNewMenu.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Add");
+		mntmNewMenuItem_5.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		mntmNewMenuItem_5.setBackground(new Color(152, 251, 152));
 		mntmNewMenuItem_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				menuSwitch();
@@ -284,6 +337,6 @@ public class AdminFunctionOption extends JPanel {
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem_5);
-		
+		panel.setVisible(true);
 	}
 }

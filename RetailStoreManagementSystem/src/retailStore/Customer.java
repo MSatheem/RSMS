@@ -1,7 +1,5 @@
 package retailStore;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,9 +13,6 @@ public class Customer {
 	private int contactNumber;
 	private String email;
 	private Date joiningDate;
-
-	//connection 
-	Connection con;
 	
 	//constructors
 	public Customer() {
@@ -103,11 +98,8 @@ public class Customer {
 
 	//save new customer
 	public boolean  saveNewCustomer() {
-		connectToDatabase();
-		PreparedStatement pst;
-
 		try {
-			pst = con.prepareStatement("INSERT INTO customer (name, address, city, contactNumber, email, dateJoined) VALUES (?, ?, ?, ?, ?, ?)");
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("INSERT INTO customer (name, address, city, contactNumber, email, dateJoined) VALUES (?, ?, ?, ?, ?, ?)");
 			pst.setString(1, this.name);
 			pst.setString(2, this.address);
 			pst.setString(3, this.city);
@@ -119,19 +111,30 @@ public class Customer {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		closeConnection();
 		return false;	
 	}
 	
 	//remove customer from database
 	public void removeCustomer() { //use of this function should be avoided as foreign key constraint problems
-		connectToDatabase();
-		PreparedStatement pst;
-		
 		try {
-			pst = con.prepareStatement("DELETE FROM customer WHERE id ?");
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("DELETE FROM customer WHERE id ?");
 			pst.setInt(1, this.id);
+			pst.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//updating customer details
+	public void updateCustomer() {
+		try {
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("UPDATE customer SET name = ?, address = ?, city = ?, contactNumber = ?, email = ? WHERE id = ?");
+			pst.setString(1, name);
+			pst.setString(2, address);
+			pst.setString(3, city);
+			pst.setInt(4, contactNumber);
+			pst.setString(5, email);
+			pst.setInt(6, id);
 			pst.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -140,12 +143,9 @@ public class Customer {
 	
 	//getting number of customers saved
 	public int getCustomerCount() {
-		connectToDatabase();
-		PreparedStatement pst;
 		ResultSet rst;
-		
 		try {
-			pst = con.prepareStatement("SELECT COUNT(id) FROM customer");
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT COUNT(id) FROM customer");
 			rst = pst.executeQuery();
 			
 			if(rst.next()) { 
@@ -164,13 +164,9 @@ public class Customer {
 	public Customer[] getAllCustomers() {
 		//creating array of customer objects from database
 		Customer customer[] = new Customer[getCustomerCount()]; 
-		connectToDatabase();
-		PreparedStatement pst;
-		ResultSet rst;
-		
 		try {
-			pst = con.prepareStatement("SELECT id,name,address,city,contactNumber,email,dateJoined FROM customer");
-			rst = pst.executeQuery();
+			PreparedStatement pst = DataBaseConnection.con.prepareStatement("SELECT id,name,address,city,contactNumber,email,dateJoined FROM customer");
+			ResultSet rst = pst.executeQuery();
 			int i=0;
 			while(rst.next()) {
 				int id = rst.getInt(1);
@@ -231,27 +227,5 @@ public class Customer {
 		}
 		return null;
 		
-	}
-	
-	//establishing connection to database
-	private void connectToDatabase() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/rsms","root","");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	//closing connection to database
-	private void closeConnection() {
-		try {
-			con.close();
-			System.out.println("Connection closed");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 }

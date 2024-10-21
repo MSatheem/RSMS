@@ -2,6 +2,8 @@ package retailStore;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -14,6 +16,8 @@ import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class ReturnProductUI extends JPanel {
 
@@ -27,11 +31,25 @@ public class ReturnProductUI extends JPanel {
 	private JTextField textFieldQuantity;
 	private int tableRowSelected = -1;
 	ReturnProduct returnProduct;
+	ReturnProductRead returnProductRead;
+	private JTextField tfReturnable;
 	
 	private void populateInvoiceTable(Object[][] obj) {
-			String[] columnName = {"ID","Name","inbound","batchNo","PPU","discount","quantity","Price"};
-			DefaultTableModel model =  new DefaultTableModel(obj, columnName);
-			table.setModel(model);
+		String[] columnName = {"ID","Name","inbound","batchNo","PPU","discount","quantity","Price"};
+		DefaultTableModel model =  new DefaultTableModel(obj, columnName);
+		table.setModel(model);
+	}
+	
+	private void clearFields() {
+		populateInvoiceTable(null);
+		textFieldCustomerId.setText(null);
+		textFieldDate.setText(null);
+		textFieldProductID.setText(null);
+		tfReturnable.setText(null);
+		textFieldQuantity.setText(null);
+		invoice = null;
+		returnProduct = null;
+		returnProductRead = null;
 	}
 
 	/**
@@ -39,31 +57,32 @@ public class ReturnProductUI extends JPanel {
 	 */
 	@SuppressWarnings("serial")
 	public ReturnProductUI() {
+		setBorder(new LineBorder(new Color(0, 0, 0)));
 		setLayout(null);
-		setBounds(1,1,1000,700);
+		setBounds(2,2,1197,766);
 		
 		JLabel lblNewLabel = new JLabel("InvoiceNumber");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setBounds(37, 45, 146, 38);
+		lblNewLabel.setBounds(131, 108, 146, 38);
 		add(lblNewLabel);
 		
 		JLabel lblCustomerid = new JLabel("CustomerId");
 		lblCustomerid.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblCustomerid.setBounds(37, 114, 146, 38);
+		lblCustomerid.setBounds(131, 177, 146, 38);
 		add(lblCustomerid);
 		
 		JLabel lblDate_1 = new JLabel("Date");
 		lblDate_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblDate_1.setBounds(419, 114, 146, 38);
+		lblDate_1.setBounds(513, 177, 146, 38);
 		add(lblDate_1);
 		
 		textFieldInvoiceNumber = new JTextField();
-		textFieldInvoiceNumber.setBounds(193, 45, 123, 33);
+		textFieldInvoiceNumber.setBounds(287, 108, 123, 33);
 		add(textFieldInvoiceNumber);
 		textFieldInvoiceNumber.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(35, 164, 930, 259);
+		scrollPane.setBounds(131, 225, 930, 259);
 		add(scrollPane);
 		
 		table = new JTable() {
@@ -82,6 +101,7 @@ public class ReturnProductUI extends JPanel {
 					returnProduct.setInvoiceNumber(invoice.getInvoiceNumber());
 					returnProduct.setBatchNo(invoice.invoiceProductList.get(tableRowSelected).getBatchNo());
 					returnProduct.setInboundLogNo(invoice.invoiceProductList.get(tableRowSelected).getInboundLogNo());
+					tfReturnable.setText(String.valueOf(returnProductRead.returnableCount(invoice.invoiceProductList.get(tableRowSelected))));
 				} catch(NullPointerException | NumberFormatException ex) {
 					ex.printStackTrace();
 				}
@@ -93,6 +113,7 @@ public class ReturnProductUI extends JPanel {
 		JButton btnNewButton = new JButton("Search");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				clearFields();
 				invoice = null;
 				try {
 					invoice = new Invoice();
@@ -102,6 +123,7 @@ public class ReturnProductUI extends JPanel {
 					if(invoice.isSaved()) {
 						populateInvoiceTable(invoice.tableArrayRead());
 						textFieldDate.setText(invoice.getDate().toString());
+						returnProductRead = new ReturnProductRead(invoice.getInvoiceNumber());
 					} else {
 						populateInvoiceTable(null);
 					}
@@ -110,47 +132,48 @@ public class ReturnProductUI extends JPanel {
 				}
 			}
 		});
-		btnNewButton.setBounds(378, 58, 85, 21);
+		btnNewButton.setBounds(491, 108, 110, 34);
 		add(btnNewButton);
 		
 		textFieldCustomerId = new JTextField();
 		textFieldCustomerId.setEditable(false);
 		textFieldCustomerId.setColumns(10);
-		textFieldCustomerId.setBounds(193, 114, 123, 33);
+		textFieldCustomerId.setBounds(287, 177, 123, 33);
 		add(textFieldCustomerId);
 		
 		textFieldDate = new JTextField();
 		textFieldDate.setEditable(false);
 		textFieldDate.setHorizontalAlignment(SwingConstants.RIGHT);
 		textFieldDate.setColumns(10);
-		textFieldDate.setBounds(506, 114, 123, 33);
+		textFieldDate.setBounds(600, 177, 123, 33);
 		add(textFieldDate);
 		
 		JLabel lblProductid = new JLabel("ProductID");
 		lblProductid.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblProductid.setBounds(37, 477, 110, 38);
+		lblProductid.setBounds(131, 529, 110, 38);
 		add(lblProductid);
 		
 		textFieldProductID = new JTextField();
 		textFieldProductID.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		textFieldProductID.setEditable(false);
 		textFieldProductID.setColumns(10);
-		textFieldProductID.setBounds(169, 477, 61, 33);
+		textFieldProductID.setBounds(263, 529, 61, 33);
 		add(textFieldProductID);
 		
 		JLabel lblQuantity = new JLabel("Quantity");
 		lblQuantity.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblQuantity.setBounds(378, 477, 110, 38);
+		lblQuantity.setBounds(513, 529, 110, 38);
 		add(lblQuantity);
 		
 		textFieldQuantity = new JTextField();
 		textFieldQuantity.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		textFieldQuantity.setColumns(10);
-		textFieldQuantity.setBounds(504, 477, 61, 33);
+		textFieldQuantity.setBounds(662, 532, 61, 33);
 		add(textFieldQuantity);
 
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(832, 59, 73, 19);
+		java.util.Date date = new java.util.Date();
+		JDateChooser dateChooser = new JDateChooser(date);
+		dateChooser.setBounds(830, 108, 110, 31);
 		add(dateChooser);
 		
 		JButton btnNewButton_1 = new JButton("Return");
@@ -159,20 +182,33 @@ public class ReturnProductUI extends JPanel {
 				//updating database after saving return info to database
 				try {
 					int qunatityReturning = Integer.parseInt(textFieldQuantity.getText());
-					if(qunatityReturning <= invoice.invoiceProductList.get(tableRowSelected).getQuantity()) {
+					int returnable = Integer.parseInt(tfReturnable.getText());
+					if(qunatityReturning <= returnable) {
 						returnProduct.setQuantityOfReturn(qunatityReturning);
 						returnProduct.setDate(dateChooser.getDate());
 						returnProduct.saveReturn();
-					
+					} else {
+						JOptionPane.showMessageDialog(null, "Check the number of products", "Warning", JOptionPane.WARNING_MESSAGE);
 					}
 				} catch(NullPointerException | NumberFormatException ex) {
-					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Check the number of products", "Warning", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnNewButton_1.setBounds(663, 477, 85, 34);
+		btnNewButton_1.setBounds(757, 529, 85, 34);
 		add(btnNewButton_1);
+		
+		tfReturnable = new JTextField();
+		tfReturnable.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		tfReturnable.setEditable(false);
+		tfReturnable.setColumns(10);
+		tfReturnable.setBounds(366, 529, 61, 33);
+		add(tfReturnable);
+		
+		JLabel lblNewLabel_1 = new JLabel("Product Return");
+		lblNewLabel_1.setBounds(513, 36, 110, 51);
+		add(lblNewLabel_1);
 		
 		populateInvoiceTable(null);//empty table
 		

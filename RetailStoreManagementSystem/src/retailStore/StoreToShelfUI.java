@@ -9,13 +9,13 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
+import java.awt.Color;
 
 public class StoreToShelfUI extends JPanel {
 
@@ -23,52 +23,67 @@ public class StoreToShelfUI extends JPanel {
 	private JTable tableStorage;
 	DefaultTableModel modelStore, modelShelf;
 	private JScrollPane scrollPane;
-	DefaultComboBoxModel<String> modelComboBox;
-	DefaultComboBoxModel<String> modelComboBox1;
+	DefaultComboBoxModel<String> modelComboBox, modelComboBox1;
 	private JLabel lblNewLabel_1;
 	InboundProductList productList;
 	Supplier[] supplier;
 	Product[] product;
-	private JTextField textField;
+	private JTextField tfProductId;
 	private JTable tableShelf;
 	private JTextField tfSellingPrice;
 	private JLabel lblNewLabel_3;
-	private JTextField tfQuantity;
-	private JTextField tFId;
-	private JTextField tFPurchasePrice;
+	private JTextField tfQuantity, tFId, tFPurchasePrice, tFBatchNo;
 	Object[][] storage;
-	private ShelfProductList shelfProductList =  new ShelfProductList();
+	private ShelfProductList shelfProductList;
 	ShelfProduct shelfProduct =  new ShelfProduct();
 	private JLabel lblNewLabel_2_2;
 	private JTextField tFLogNo;
 	private JLabel lblNewLabel_3_2;
-	private JTextField tFBatchNo;
 	JDateChooser dateChooser;
+	private JPanel panel;
+	private ShelfListTable shelfListTable;
 	
-	//populating table
-	private void populateTable() {
+	private void populateTable(int productId) {
 		InboundProductListDetails inboundProductListDetails = new InboundProductListDetails();
-		storage = inboundProductListDetails.tableArray();
+		storage = inboundProductListDetails.tableArrayAll(productId);
 		String productStored[] = {"Date","LogNo","Id","Name","Batch","Mfg Date","Exp Date","Quantity","Price"};
-		String productToShelf[] = {"Id","Name","BatchNo", "Purchase", "quantity","sellingPrice"};
-		modelStore = new DefaultTableModel(storage,productStored);
-		modelShelf =  new DefaultTableModel(productList.listToArray(), productToShelf);
+		modelStore = new DefaultTableModel(inboundProductListDetails.tableArrayAll(productId),productStored);
 		tableStorage.setModel(modelStore);
+		tableStorage.getColumnModel().getColumn(3).setPreferredWidth(200);
+	}
+	
+	private void populateShelfTable() {
+		String productToShelf[] = {"Id","BatchNo", "Purchase", "quantity","sellingPrice"};
+		modelShelf =  new DefaultTableModel(shelfProductList.tableArray(), productToShelf);
 		tableShelf.setModel(modelShelf);
+	}
+	
+	private void shelfListTable() {
+		shelfListTable = new ShelfListTable();
+		shelfListTable.setBounds(0, 0, 401, 511);
+		panel.add(shelfListTable);
+	}
+	
+	private void clearFields() {
+		tFLogNo.setText(null);
+		tFBatchNo.setText(null);
+		tFId.setText(null);
+		tFPurchasePrice.setText(null);
+		tfQuantity.setText(null);
+		tfSellingPrice.setText(null);
 	}
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public StoreToShelfUI() {
 		setLayout(null);
-		setBounds(1, 1, 1000, 700);
+		setBounds(2, 2, 1197, 766);
 		
 		productList = new InboundProductList();
 		shelfProductList = new ShelfProductList();
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(208, 112, 618, 216);
+		scrollPane.setBounds(39, 111, 687, 216);
 		add(scrollPane);
 		
 		tableStorage = new JTable();
@@ -80,59 +95,65 @@ public class StoreToShelfUI extends JPanel {
 		lblNewLabel_1.setBounds(402, 20, 196, 35);
 		add(lblNewLabel_1);
 		
-		JLabel lblNewLabel = new JLabel("Search by");
+		JLabel lblNewLabel = new JLabel("Search by product id");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel.setBounds(208, 56, 92, 35);
+		lblNewLabel.setBounds(39, 55, 184, 35);
 		add(lblNewLabel);
 		
-		JComboBox comboBoxSearchType = new JComboBox();
-		comboBoxSearchType.setModel(new DefaultComboBoxModel(new String[] {"Product Id", "Product Name"}));
-		comboBoxSearchType.setBounds(310, 65, 92, 21);
-		add(comboBoxSearchType);
-		
-		textField = new JTextField();
-		textField.addKeyListener(new KeyAdapter() {
+		tfProductId = new JTextField();
+		tfProductId.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				System.out.println(comboBoxSearchType.getSelectedIndex());
-				//populating table according to user input
-				
+			public void keyReleased(KeyEvent e) {
+				//populating table according to product id inserted
+				try {
+					if(!tfProductId.getText().isBlank()) {
+						int productIdRead = Integer.parseInt(tfProductId.getText());
+						if(productIdRead>0) {
+							populateTable(productIdRead);
+						}
+					} else {
+						populateTable(-1);
+					}
+				} catch(NumberFormatException ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
-		textField.setBounds(429, 65, 128, 19);
-		add(textField);
-		textField.setColumns(10);
+		tfProductId.setBounds(260, 64, 128, 19);
+		add(tfProductId);
+		tfProductId.setColumns(10);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(208, 480, 616, 165);
+		scrollPane_1.setBounds(39, 479, 616, 165);
 		add(scrollPane_1);
 		
 		tableShelf = new JTable();
 		scrollPane_1.setViewportView(tableShelf);
 		
 		tfSellingPrice = new JTextField();
-		tfSellingPrice.setBounds(567, 418, 96, 20);
+		tfSellingPrice.setBounds(398, 417, 96, 20);
 		add(tfSellingPrice);
 		tfSellingPrice.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Selling Price");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel_2.setBounds(402, 418, 155, 20);
+		lblNewLabel_2.setBounds(233, 417, 155, 20);
 		add(lblNewLabel_2);
 		
 		lblNewLabel_3 = new JLabel("Quantity");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel_3.setBounds(208, 412, 100, 22);
+		lblNewLabel_3.setBounds(39, 411, 100, 22);
 		add(lblNewLabel_3);
 		
 		tfQuantity = new JTextField();
 		tfQuantity.setColumns(10);
-		tfQuantity.setBounds(296, 418, 96, 20);
+		tfQuantity.setBounds(127, 417, 96, 20);
 		add(tfQuantity);
 		
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				shelfProductList =  new ShelfProductList();
 				//add product to list and showing in the table
 				ShelfProduct shelfProduct = new ShelfProduct();
 				shelfProduct.setId(Integer.parseInt(tFId.getText()));
@@ -140,10 +161,13 @@ public class StoreToShelfUI extends JPanel {
 				shelfProduct.setInboundLogNo(Integer.parseInt(tFLogNo.getText()));
 				shelfProduct.setSalePrice(Integer.parseInt(tfSellingPrice.getText()));
 				shelfProduct.setQuantityMovedToShelf(Integer.valueOf(tfQuantity.getText()));
+				shelfProduct.setPurchasePrice(Double.parseDouble(tFPurchasePrice.getText()));
 				shelfProductList.add(shelfProduct);
+				populateShelfTable();
+				clearFields();
 			}
 		});
-		btnAdd.setBounds(741, 417, 85, 21);
+		btnAdd.setBounds(572, 416, 85, 21);
 		add(btnAdd);
 		
 		JButton btnAdd_1 = new JButton("Save");
@@ -153,10 +177,16 @@ public class StoreToShelfUI extends JPanel {
 				shelfProductList.setDate(date);
 				//save to the database
 				shelfProductList.saveList();
-				populateTable();
+				populateTable(-1);
+				//load updated shelf list
+				shelfListTable();
+				shelfProductList = null;
+				shelfProductList = new ShelfProductList(); //creating object for next invoice
+				populateShelfTable();
+				clearFields();
 			}
 		});
-		btnAdd_1.setBounds(741, 653, 85, 21);
+		btnAdd_1.setBounds(572, 652, 85, 21);
 		add(btnAdd_1);
 		
 		JButton btnSelect = new JButton("Select");
@@ -170,63 +200,81 @@ public class StoreToShelfUI extends JPanel {
 				tFLogNo.setText(String.valueOf(storage[selectedRow][1]));
 			}
 		});
-		btnSelect.setBounds(741, 340, 85, 21);
+		btnSelect.setBounds(572, 339, 85, 21);
 		add(btnSelect);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("ID");
 		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel_2_1.setBounds(208, 379, 50, 20);
+		lblNewLabel_2_1.setBounds(39, 378, 50, 20);
 		add(lblNewLabel_2_1);
 		
 		tFId = new JTextField();
 		tFId.setEditable(false);
 		tFId.setColumns(10);
-		tFId.setBounds(296, 384, 96, 20);
+		tFId.setBounds(127, 383, 96, 20);
 		add(tFId);
 		
 		JLabel lblNewLabel_3_1 = new JLabel("Purchase Price");
 		lblNewLabel_3_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel_3_1.setBounds(402, 386, 155, 22);
+		lblNewLabel_3_1.setBounds(233, 385, 155, 22);
 		add(lblNewLabel_3_1);
 		
 		tFPurchasePrice = new JTextField();
 		tFPurchasePrice.setEditable(false);
 		tFPurchasePrice.setColumns(10);
-		tFPurchasePrice.setBounds(567, 388, 96, 20);
+		tFPurchasePrice.setBounds(398, 387, 96, 20);
 		add(tFPurchasePrice);
 		
 		JButton btnClear = new JButton("Clear");
-		btnClear.setBounds(603, 653, 85, 21);
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearFields();
+				shelfProductList = null;
+				shelfProductList = new ShelfProductList(); //creating object for next invoice
+				populateShelfTable();
+				populateTable(-1);
+				clearFields();
+			}
+		});
+		btnClear.setBounds(434, 652, 85, 21);
 		add(btnClear);
 		
 		lblNewLabel_2_2 = new JLabel("LogNo");
 		lblNewLabel_2_2.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel_2_2.setBounds(209, 341, 70, 20);
+		lblNewLabel_2_2.setBounds(40, 340, 70, 20);
 		add(lblNewLabel_2_2);
 		
 		tFLogNo = new JTextField();
 		tFLogNo.setEditable(false);
 		tFLogNo.setColumns(10);
-		tFLogNo.setBounds(296, 341, 96, 20);
+		tFLogNo.setBounds(127, 340, 96, 20);
 		add(tFLogNo);
 		
 		lblNewLabel_3_2 = new JLabel("Batch No");
 		lblNewLabel_3_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel_3_2.setBounds(402, 338, 155, 22);
+		lblNewLabel_3_2.setBounds(233, 337, 155, 22);
 		add(lblNewLabel_3_2);
 		
 		tFBatchNo = new JTextField();
 		tFBatchNo.setEditable(false);
 		tFBatchNo.setColumns(10);
-		tFBatchNo.setBounds(567, 341, 96, 20);
+		tFBatchNo.setBounds(398, 340, 96, 20);
 		add(tFBatchNo);
 		
 		dateChooser = new JDateChooser();
 		dateChooser.setDateFormatString("yyyy/MM/dd");
-		dateChooser.setBounds(684, 65, 142, 19);
+		dateChooser.setBounds(515, 64, 142, 19);
 		add(dateChooser);
 		
-		populateTable();
+		panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBackground(new Color(250, 250, 210));
+		panel.setBounds(736, 55, 401, 511);
+		add(panel);
+		
+		shelfListTable();
+		populateTable(-1);
+		populateShelfTable();
 		
 	}
 }

@@ -4,9 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * 
- */
 public class Supplier {
 
 	// class attributes
@@ -88,16 +85,8 @@ public class Supplier {
 		this.contactPerson = contactPerson;
 	}
 
-	// printing object details
-	@Override
-	public String toString() {
-		return "Supplier [id=" + id + ", name=" + name + ", address=" + address + ", email=" + email
-				+ ", contactNumber=" + contactNumber + ", contactPerson=" + contactPerson + "]";
-	}
-
 	// saving new supplier
 	public void saveNewSupplier() {
-		//connectToDatabase();
 		PreparedStatement pst;
 
 		try {
@@ -205,23 +194,6 @@ public class Supplier {
 	// getting number of suppliers saved
 	public int getSupplierCount() {
 		return DataBaseConnection.getCount("supplier","id");
-	}
-
-	public boolean isSaved() {
-		PreparedStatement pst;
-		ResultSet rst;
-
-		try {
-			pst = DataBaseConnection.con.prepareStatement("SELECT name FROM supplier WHERE id = ?");
-			pst.setInt(1, id);
-			rst = pst.executeQuery();
-			if (rst.next()) {
-				return true;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 	
 	public boolean updateSupplier() {
