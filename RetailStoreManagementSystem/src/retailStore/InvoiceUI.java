@@ -77,7 +77,6 @@ public class InvoiceUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings("serial")
 	public InvoiceUI() {
 		setBackground(new Color(135, 206, 235));
 		setLayout(null);

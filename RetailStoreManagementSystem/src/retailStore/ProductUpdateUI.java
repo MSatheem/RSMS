@@ -75,7 +75,6 @@ public class ProductUpdateUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings("serial")
 	public ProductUpdateUI() {
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);

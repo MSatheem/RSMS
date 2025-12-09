@@ -39,7 +39,6 @@ public class SupplierListTable extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings("serial")
 	public SupplierListTable() {
 		setLayout(null);
 		setBounds(0, 0, 398, 454);

@@ -55,7 +55,6 @@ public class EmployeeUpdateUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings("serial")
 	public EmployeeUpdateUI() {
 		setLayout(null);
 		setBounds(0,0,1000,700);

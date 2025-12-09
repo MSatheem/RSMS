@@ -62,7 +62,6 @@ public class CustomerUpdateUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings("serial")
 	public CustomerUpdateUI() {
 		setBackground(new Color(128, 128, 128));
 		setLayout(null);

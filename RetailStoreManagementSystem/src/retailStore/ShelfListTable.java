@@ -38,7 +38,6 @@ public class ShelfListTable extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings("serial")
 	public ShelfListTable() {
 		setLayout(null);
 		setBounds(0, 0, 401, 511);

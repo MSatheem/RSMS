@@ -63,7 +63,7 @@ public class ManageUserAccountsUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ManageUserAccountsUI() {
 		setLayout(null);
 		setBounds(0,0,1000,700);

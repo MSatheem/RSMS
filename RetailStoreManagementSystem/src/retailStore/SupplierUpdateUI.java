@@ -72,7 +72,6 @@ public class SupplierUpdateUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings("serial")
 	public SupplierUpdateUI() {
 		setBackground(new Color(254, 160, 170));
 		setLayout(null);

@@ -55,7 +55,6 @@ public class ReturnProductUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings("serial")
 	public ReturnProductUI() {
 		setBorder(new LineBorder(new Color(0, 0, 0)));
 		setLayout(null);

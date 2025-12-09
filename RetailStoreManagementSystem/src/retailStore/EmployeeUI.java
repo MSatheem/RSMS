@@ -43,7 +43,6 @@ public class EmployeeUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings("serial")
 	public EmployeeUI() {
 		setLayout(null);
 		setBounds(0,0,1000,700);
