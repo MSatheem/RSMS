@@ -2,38 +2,41 @@ package retailStore;
 
 import java.util.Date;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.SwingConstants;
+
 import java.awt.Font;
-import javax.swing.JScrollPane;
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
+
+import net.sf.dynamicreports.report.exception.DRException;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
 import javax.swing.border.LineBorder;
+import java.awt.BorderLayout;
 
 @SuppressWarnings("serial")
 public class InventoryReportUI extends JPanel {
-	private static JTable table;
 	static String product[][];
 	int yearSelected,monthSelected;
+	InventoryReportGenerator inventoryReportGenerator = new InventoryReportGenerator();
 	
-	static void populateTable(int year, int month) {
+	public void populateTable(int year, int month, JPanel panel) {
 		try {
-			InventoryReport inventoryReport = new InventoryReport(year, month);
-			String cName[] = {"ID", "Name", "In Store", "In Shelf","CurrentStock","Sold", "return", "Inbound"};
-			DefaultTableModel model = new DefaultTableModel(inventoryReport.genreatereport(), cName);
-			table.setModel(model);
-			table.setRowHeight(40);
-			table.getColumnModel().getColumn(0).setPreferredWidth(1);
-			table.getColumnModel().getColumn(1).setPreferredWidth(250);
-		} catch (Exception e) {
-			e.printStackTrace();
+			panel.removeAll();
+			JPanel reportPanel = inventoryReportGenerator.showReport(); // returns panel with JRViewer 
+			panel.add(reportPanel, BorderLayout.CENTER); // add to CENTER so it fills available area panel.revalidate(); panel.repaint(); panel.setVisible(true);
+			panel.revalidate();
+			panel.repaint();
+		} catch (DRException e1) {
+			e1.printStackTrace();
 		}
-		
 	}
 	
 	/**
@@ -42,23 +45,29 @@ public class InventoryReportUI extends JPanel {
 	public InventoryReportUI() {
 		setBorder(new LineBorder(new Color(0, 0, 0)));
 		setBackground(new Color(175, 238, 238));
-		setLayout(null);
 		setBounds(0,0,1200,800);
+		setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(212, 190, 775, 500);
-		add(scrollPane);
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.setBackground(new Color(175, 238, 238));
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
-		table.setFont(new Font("Arial", Font.BOLD, 17));
+		JLabel lblTitle = new JLabel("Monthly Inventory Report" ,SwingConstants.CENTER);
+		lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
+		topPanel.add(lblTitle);
+
+		add(topPanel, BorderLayout.NORTH);
 		
+		FlowLayout fl_controlPanel = new FlowLayout(FlowLayout.CENTER);
+		fl_controlPanel.setVgap(10);
+		fl_controlPanel.setHgap(10);
+		JPanel controlPanel = new JPanel(fl_controlPanel);
+		controlPanel.setBackground(new Color(175, 238, 238));
+
 		final JMonthChooser monthChooser = new JMonthChooser();
 		monthChooser.getSpinner().setFont(new Font("Tahoma", Font.PLAIN, 17));
 		monthChooser.getComboBox().setFont(new Font("Tahoma", Font.BOLD, 17));
-		monthChooser.setBounds(372, 144, 144, 36);
-		add(monthChooser);
-		
+		controlPanel.add(monthChooser);
+		monthChooser.setPreferredSize(new Dimension(150, 35)); 
 		Date date = new Date();
 		@SuppressWarnings("deprecation")
 		int year = 1900+date.getYear();
@@ -68,27 +77,24 @@ public class InventoryReportUI extends JPanel {
 		yearChooser.getSpinner().setFont(new Font("Tahoma", Font.BOLD, 17));
 		yearChooser.setEndYear(year);
 		yearChooser.setStartYear(2023);
-		yearChooser.setBounds(611, 144, 75, 36);
-		add(yearChooser);
+		yearChooser.setPreferredSize(new Dimension(100, 35));
+		controlPanel.add(yearChooser);
+		
+		JPanel southPanel = new JPanel(new BorderLayout());
 		
 		JButton btnGenerate = new JButton("Generate");
 		btnGenerate.setFont(new Font("Arial", Font.BOLD, 17));
 		btnGenerate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				yearSelected = yearChooser.getValue();
-				monthSelected = monthChooser.getMonth();		
-				populateTable(yearSelected,monthSelected+1); //combo box zero indexed 
+				monthSelected = monthChooser.getMonth();
+				populateTable(yearSelected,monthSelected+1, southPanel); //combo box zero indexed 
 			}
 		});
-		btnGenerate.setBounds(749, 144, 133, 36);
-		add(btnGenerate);
+		btnGenerate.setPreferredSize(new Dimension(150, 35));
+		controlPanel.add(btnGenerate);
 		
-		JLabel lblNewLabel = new JLabel("Monthly Inventory Report");
-		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
-		lblNewLabel.setBounds(475, 47, 250, 30);
-		add(lblNewLabel);
-		yearSelected = yearChooser.getValue();
-		monthSelected = monthChooser.getMonth();
-		
+		topPanel.add(controlPanel, BorderLayout.SOUTH);
+		add(southPanel, BorderLayout.CENTER);
 	}
 }

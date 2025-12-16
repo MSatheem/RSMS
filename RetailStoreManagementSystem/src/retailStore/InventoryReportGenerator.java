@@ -2,12 +2,15 @@ package retailStore;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
+import javax.swing.JPanel;
+
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.component.Components;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.swing.JRViewer;
 
 public class InventoryReportGenerator {
 	private DRDataSource ds;
@@ -16,12 +19,9 @@ public class InventoryReportGenerator {
 	////////////////////////////
 	StyleBuilder boldStyle = stl.style().bold();
 	StyleBuilder columnTitleStyle = stl.style().bold().setBackgroundColor(java.awt.Color.LIGHT_GRAY);
-	TextColumnBuilder<String> productCol = col.column("Region", "region", type.stringType())
-			.setTitleStyle(columnTitleStyle);
-	TextColumnBuilder<Integer> regionCol = col.column("Product", "product", type.integerType())
-			.setTitleStyle(columnTitleStyle);
-	TextColumnBuilder<Integer> amountCol = col.column("Amount", "amount", type.integerType())
-			.setTitleStyle(columnTitleStyle);
+	TextColumnBuilder<String> productCol;
+	TextColumnBuilder<Integer> regionCol;
+	TextColumnBuilder<Integer> amountCol;
 
 	
 	
@@ -42,21 +42,27 @@ public class InventoryReportGenerator {
 		for (Object[] row : inventoryData) {
 			ds.add(row[1], row[2], row[3]);
 		}
-
+		productCol = col.column("Region", "region", type.stringType())
+				.setTitleStyle(columnTitleStyle);
+		regionCol = col.column("Product", "product", type.integerType())
+				.setTitleStyle(columnTitleStyle);
+		amountCol = col.column("Amount", "amount", type.integerType())
+				.setTitleStyle(columnTitleStyle);
 	}
 
-	public void showReport() throws DRException {
+	public JPanel showReport() throws DRException {
+		buildReport();
 		JasperPrint print = report().title(Components.text("Sales Report").setStyle(boldStyle))
 				.columns(regionCol, productCol, amountCol).setDataSource(ds).toJasperPrint();
-	}
-
-	public void inventoryReportPDF(String[] args) throws DRException {
-		buildReport();
-
-		
-		report().title(Components.text("Sales Report").setStyle(boldStyle)) // setting title of the report
-				.columns(regionCol, productCol, amountCol).setDataSource(ds)
-				.toPdf(export.pdfExporter(buildFilename("SalesReport", "2025-12", "Global", 1, "pdf")));
+	
+		 // Create JRViewer with JasperPrint
+	    JRViewer viewer = new JRViewer(print);
+	    
+	    // Put JRViewer inside a JPanel
+	    JPanel panel = new JPanel();
+	    panel.setLayout(new java.awt.BorderLayout());
+	    panel.add(viewer, java.awt.BorderLayout.CENTER);
+	    return panel;
 	}
 
 }

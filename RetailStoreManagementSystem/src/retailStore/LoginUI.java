@@ -80,20 +80,21 @@ public class LoginUI extends JPanel {
 		btnLogin.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				if(!tfUserName.getText().isBlank() & !passwordField.getPassword().toString().isBlank()) {
-					String userName = tfUserName.getText();
-					String password = passwordField.getText();
-					user = new Users(userName, password);
-					if(user.login()) { //access found
-						mainWindow.loginSuccessfull();
-					} else {
-						JOptionPane.showMessageDialog(null, "Invalid Credentials", "Warning", JOptionPane.WARNING_MESSAGE); 
-					}
-				} else {
-					JOptionPane.showMessageDialog(null, "Fields Cannot be empty", "Warning", JOptionPane.WARNING_MESSAGE);
-				}
-				user = null;
-				clearFields();
+				mainWindow.loginSuccessfull();
+//				if(!tfUserName.getText().isBlank() & !passwordField.getPassword().toString().isBlank()) {
+//					String userName = tfUserName.getText();
+//					String password = passwordField.getText();
+//					user = new Users(userName, password);
+//					if(user.login()) { //access found
+//						mainWindow.loginSuccessfull();
+//					} else {
+//						JOptionPane.showMessageDialog(null, "Invalid Credentials", "Warning", JOptionPane.WARNING_MESSAGE); 
+//					}
+//				} else {
+//					JOptionPane.showMessageDialog(null, "Fields Cannot be empty", "Warning", JOptionPane.WARNING_MESSAGE);
+//				}
+//				user = null;
+//				clearFields();
 			}
 		});
 		btnLogin.setFont(new Font("Arial", Font.BOLD, 20));
