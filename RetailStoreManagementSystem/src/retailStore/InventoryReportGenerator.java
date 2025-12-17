@@ -5,7 +5,6 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 import javax.swing.JPanel;
 
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
-import net.sf.dynamicreports.report.builder.component.Components;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
@@ -18,8 +17,8 @@ public class InventoryReportGenerator {
 	private String[] columnNames = { "id", "name", "inStore", "inShelf", "total" };
 	
 	StyleBuilder boldStyle = stl.style().bold();
-	StyleBuilder columnTitleStyle = stl.style().bold().setBackgroundColor(java.awt.Color.LIGHT_GRAY);
-	StyleBuilder fieldStyle = stl.style().setHorizontalTextAlignment(HorizontalTextAlignment.LEFT);
+	StyleBuilder columnTitleStyle = stl.style().bold().setBackgroundColor(java.awt.Color.LIGHT_GRAY).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
+	StyleBuilder fieldStyle = stl.style().setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
 	TextColumnBuilder<Integer> productIdCol;
 	TextColumnBuilder<String> productNameCol;
 	TextColumnBuilder<Integer> inStoreCol;
@@ -62,8 +61,6 @@ public class InventoryReportGenerator {
 	public JPanel showReport() throws DRException {
 		buildReport();
 		JasperPrint print = report()
-				.title(Components.text("Sales Report")
-				.setStyle(boldStyle))
 				.columns(productIdCol, productNameCol, inStoreCol, inShelfCol, inTotal)
 				.setColumnStyle(fieldStyle)
 				.setDataSource(ds)

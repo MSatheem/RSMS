@@ -18,9 +18,8 @@ public class InventoryReportUI extends JPanel {
 	public void populateTable(JPanel panel) {
 		try {
 			panel.removeAll();
-			JPanel reportPanel = inventoryReportGenerator.showReport(); // returns panel with JRViewer
-			panel.add(reportPanel, BorderLayout.CENTER); // add to CENTER so it fills available area panel.revalidate();
-															// panel.repaint(); panel.setVisible(true);
+			JPanel reportPanel = inventoryReportGenerator.showReport();
+			panel.add(reportPanel, BorderLayout.CENTER); 
 			panel.revalidate();
 			panel.repaint();
 		} catch (DRException e1) {
@@ -45,7 +44,7 @@ public class InventoryReportUI extends JPanel {
 		add(topPanel, BorderLayout.NORTH);
 		topPanel.setBackground(new Color(175, 238, 238));
 
-		JLabel lblTitle = new JLabel("Monthly Inventory Report", SwingConstants.CENTER);
+		JLabel lblTitle = new JLabel("Inventory Report", SwingConstants.CENTER);
 		lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
 		topPanel.add(lblTitle);
 		populateTable(reportViewPanel);
