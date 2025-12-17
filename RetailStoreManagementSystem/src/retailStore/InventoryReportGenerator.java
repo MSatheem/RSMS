@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.component.Components;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -14,15 +15,16 @@ import net.sf.jasperreports.swing.JRViewer;
 
 public class InventoryReportGenerator {
 	private DRDataSource ds;
-	private String[] columnNames = { "region", "product", "amount" };
+	private String[] columnNames = { "id", "name", "inStore", "inShelf", "total" };
 	
-	////////////////////////////
 	StyleBuilder boldStyle = stl.style().bold();
 	StyleBuilder columnTitleStyle = stl.style().bold().setBackgroundColor(java.awt.Color.LIGHT_GRAY);
-	TextColumnBuilder<String> productCol;
-	TextColumnBuilder<Integer> regionCol;
-	TextColumnBuilder<Integer> amountCol;
-
+	StyleBuilder fieldStyle = stl.style().setHorizontalTextAlignment(HorizontalTextAlignment.LEFT);
+	TextColumnBuilder<Integer> productIdCol;
+	TextColumnBuilder<String> productNameCol;
+	TextColumnBuilder<Integer> inStoreCol;
+	TextColumnBuilder<Integer> inShelfCol;
+	TextColumnBuilder<Integer> inTotal;
 	
 	
 	
@@ -33,28 +35,41 @@ public class InventoryReportGenerator {
 	}
 
 	private void buildReport() {
-		InventoryReport inventoryReport = new InventoryReport(2024, 12);
-		Object[][] inventoryData = inventoryReport.genreatereport();
+		InventoryReport inventoryReport = new InventoryReport();
+		Object[][] inventoryData = inventoryReport.currentInventory();
 
 		// creating data source to the report
 		ds = new DRDataSource(columnNames);
 
 		for (Object[] row : inventoryData) {
-			ds.add(row[1], row[2], row[3]);
+			ds.add(row[0], row[1], row[2], row[3], row[4]);
 		}
-		productCol = col.column("Region", "region", type.stringType())
+		productIdCol = col.column("ID", "id", type.integerType())
+				.setTitleStyle(columnTitleStyle).setFixedWidth(25);
+		productNameCol = col.column("Name", "name", type.stringType())
+				.setTitleStyle(columnTitleStyle).setMinWidth(200);
+		inStoreCol = col.column("Store", "inStore", type.integerType())
 				.setTitleStyle(columnTitleStyle);
-		regionCol = col.column("Product", "product", type.integerType())
+		inShelfCol = col.column("Shelf", "inShelf", type.integerType())
 				.setTitleStyle(columnTitleStyle);
-		amountCol = col.column("Amount", "amount", type.integerType())
+		inTotal = col.column("Total", "total", type.integerType())
 				.setTitleStyle(columnTitleStyle);
-	}
+			
+		}
+	
+	
 
 	public JPanel showReport() throws DRException {
 		buildReport();
-		JasperPrint print = report().title(Components.text("Sales Report").setStyle(boldStyle))
-				.columns(regionCol, productCol, amountCol).setDataSource(ds).toJasperPrint();
-	
+		JasperPrint print = report()
+				.title(Components.text("Sales Report")
+				.setStyle(boldStyle))
+				.columns(productIdCol, productNameCol, inStoreCol, inShelfCol, inTotal)
+				.setColumnStyle(fieldStyle)
+				.setDataSource(ds)
+				.highlightDetailEvenRows()
+				.toJasperPrint();
+
 		 // Create JRViewer with JasperPrint
 	    JRViewer viewer = new JRViewer(print);
 	    
