@@ -10,6 +10,9 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.border.BevelBorder;
+import javax.swing.JComboBox;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 public class SalesReportUI extends JPanel {
 	private DecimalFormat df = new DecimalFormat("#.00");
@@ -110,18 +113,40 @@ public class SalesReportUI extends JPanel {
 		lblProductsReturn.setBounds(15, 72, 158, 61);
 		panel_1_1_1_1.add(lblProductsReturn);
 		
+		
+		JComboBox<String> comboBoxMonth = new JComboBox<String>();
+		comboBoxMonth.setFont(new Font("Tahoma", Font.BOLD, 14));
+		String[] months = {"January", "February", "March", "Aprl", "May", "June", "July", "August", "September", "October", "November", "December"};
+		DefaultComboBoxModel<String> modelComboBoxMonths = new DefaultComboBoxModel<String>(months);
+		comboBoxMonth.setModel(modelComboBoxMonths);
+		comboBoxMonth.setBounds(297, 137, 91, 32);
+		add(comboBoxMonth);
+		
+		JComboBox<String> comboBoxYear = new JComboBox<String>();
+		String[] year = {"2024", "2025", "2026"};
+		ComboBoxModel<String> modelComboBoxYears = new DefaultComboBoxModel<String>(year);
+		comboBoxYear.setModel(modelComboBoxYears);
+		comboBoxYear.setFont(new Font("Tahoma", Font.BOLD, 14));
+		comboBoxYear.setBounds(430, 136, 91, 32);
+		add(comboBoxYear);
+		
+
 		JButton btnNewButton = new JButton("Generate");
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SalesReport report = new SalesReport();
+				//get selected year
+				int year = 2024;
+				//get selected month 
+				int month = comboBoxMonth.getSelectedIndex() + 1;
+				SalesReport report = new SalesReport(month, year);
 				lblTotalSales.setText(String.valueOf(df.format(report.getTotalSales())));
 				lblProductsSold.setText(String.valueOf(report.getProductSold()));
 				lblProductsReturn.setText(String.valueOf(report.getProductsReturned()));
 				lblProfit.setText(String.valueOf(df.format(report.getProfit())));
 			}
 		});
-		btnNewButton.setBounds(766, 148, 85, 21);
+		btnNewButton.setBounds(581, 136, 113, 35);
 		add(btnNewButton);
-		
 	}
 }
