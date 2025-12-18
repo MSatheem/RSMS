@@ -15,28 +15,36 @@ import net.sf.dynamicreports.report.datasource.DRDataSource;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.swing.JRViewer;
+import static net.sf.dynamicreports.report.builder.DynamicReports.sbt;;
 
 public class InvoiceGenerator {
 	private DRDataSource ds;
-	private String[] columnNames = { "id", "name", "quantity", "unitPrice", "subTotal"};
-
+	private String[] columnNames = { "id", "name", "quantity", "unitPrice", "subTotal" };
+	
+	
+	//style builders
 	StyleBuilder boldStyle = stl.style().bold();
 	StyleBuilder columnTitleStyle = stl.style().bold().setBackgroundColor(java.awt.Color.LIGHT_GRAY)
 			.setHorizontalTextAlignment(HorizontalTextAlignment.LEFT);
 	StyleBuilder fieldStyle = stl.style().setHorizontalTextAlignment(HorizontalTextAlignment.LEFT);
+	StyleBuilder subtotalStyle = stl.style(boldStyle).setBackgroundColor(java.awt.Color.LIGHT_GRAY) .setHorizontalTextAlignment(HorizontalTextAlignment.LEFT); 
+	
+	
 	
 	TextColumnBuilder<Integer> productIdCol;
 	TextColumnBuilder<String> productNameCol;
-	TextColumnBuilder<Integer> inStoreCol;
+	TextColumnBuilder<Integer> quantityCol;
 	TextColumnBuilder<Double> unitPriceCol;
 	TextColumnBuilder<Double> subTotalCol;
+
+	// footer
 	TextColumnBuilder<Double> priceCol = col.column("Unit Price", "price", type.doubleType());
 	TextColumnBuilder<Integer> qtyCol = col.column("Quantity", "quantity", type.integerType());
-	//TextColumnBuilder<Double> totalCol = priceCol.multiply(qtyCol).setTitle("Total");
 
 	// Add footer to show sum
-	qtyCol.setColumnFooter(cmp.text("Total Qty:").setStyle(stl.style().bold()));
-	totalCol.setColumnFooter(cmp.text("Grand Total:").setStyle(stl.style().bold()));
+//	qtyCol.setColumnFooter(cmp.text("Total Qty:").setStyle(stl.style().bold()));
+//	totalCol.setColumnFooter(cmp.text("Grand Total:").setStyle(stl.style().bold()));
+
 	static String buildFilename(String reportName, String period, String segment, int version, String ext) {
 		String safeReport = reportName.replaceAll("[\\\\/:*?\"<>|]", "-");
 		String safeSegment = segment.replaceAll("[\\\\/:*?\"<>|]", "-");
@@ -53,24 +61,22 @@ public class InvoiceGenerator {
 		}
 		productIdCol = col.column("ID", "id", type.integerType()).setTitleStyle(columnTitleStyle).setFixedWidth(25);
 		productNameCol = col.column("Name", "name", type.stringType()).setTitleStyle(columnTitleStyle).setMinWidth(200);
-		inStoreCol = col.column("Quantity", "quantity", type.integerType()).setTitleStyle(columnTitleStyle);
+		quantityCol = col.column("Quantity", "quantity", type.integerType()).setTitleStyle(columnTitleStyle);
 		unitPriceCol = col.column("Price", "unitPrice", type.doubleType()).setTitleStyle(columnTitleStyle);
 		subTotalCol = col.column("Sub Total", "subTotal", type.doubleType()).setTitleStyle(columnTitleStyle);
-		
+
 	}
 
 	public JPanel showInvoice(Invoice invoice) throws DRException {
 		buildReport(invoice);
 		JasperPrint print = report()
-				.title(
-					Components.text("Invoice /Bill")
-						.setStyle(boldStyle),
-					Components.text("Customer ID: "+invoice.getCustomerId())
-				)
-				.columns(productIdCol, productNameCol, inStoreCol, unitPriceCol, subTotalCol)
-				.setColumnStyle(fieldStyle)
-				.setDataSource(ds)
-				.highlightDetailEvenRows()
+                .title(Components.text("Invoice /Bill").setStyle(boldStyle),
+						Components.text("Customer ID: " + invoice.getCustomerId()))
+				.columns(productIdCol, productNameCol, quantityCol, unitPriceCol, subTotalCol)
+				.setColumnStyle(fieldStyle).setDataSource(ds).highlightDetailEvenRows()
+				
+				.subtotalsAtSummary(
+						sbt.text("Total", unitPriceCol).setStyle(subtotalStyle), sbt.sum(subTotalCol).setStyle(subtotalStyle).setPattern("Rs #,##0.00"))
 				.toJasperPrint();
 
 		// Create JRViewer with JasperPrint

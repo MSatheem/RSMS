@@ -40,7 +40,7 @@ public class InvoicePrintDemo extends JFrame {
 		
 		////////////////Temporary code
 		Invoice invoice = new Invoice();
-		invoice.setInvoiceNumber(4);
+		invoice.setInvoiceNumber(3);
 		invoice.readInvoice();
 		
 		//////
