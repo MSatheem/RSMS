@@ -17,6 +17,11 @@ public class SalesReport {
 		retrieveAllInvoice();
 	}
 	
+	public SalesReport(int month, int year) {
+		retrieveAllInvoice(month, year);
+	}
+	
+	
 	private void retrieveAllInvoice() {
 		PreparedStatement pst;
 		ResultSet rst;
@@ -36,6 +41,29 @@ public class SalesReport {
 			e.printStackTrace();
 		}
 	}
+	
+	private void retrieveAllInvoice(int month, int year) {
+		PreparedStatement pst;
+		ResultSet rst;
+		
+		try {
+			pst = DataBaseConnection.con.prepareStatement("SELECT number from invoice WHERE YEAR(date) = ? AND MONTH(date) = ?");
+			pst.setInt(1, year);
+			pst.setInt(2, month);
+			rst = pst.executeQuery();
+			while(rst.next()) {
+				SalesNode node = new SalesNode(rst.getInt(1));
+				totalSales = totalSales + node.saleValue();
+				productSold = productSold + node.numberOfProducts();
+				productsReturned = productsReturned + node.getNumberOfProductReturned();
+				profitEarned = profitEarned + node.getProfit();
+				salesList.add(node);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	public double getTotalSales() {
 		return totalSales;

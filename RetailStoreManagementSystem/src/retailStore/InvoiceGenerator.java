@@ -70,8 +70,9 @@ public class InvoiceGenerator {
 	public JPanel showInvoice(Invoice invoice) throws DRException {
 		buildReport(invoice);
 		JasperPrint print = report()
-                .title(Components.text("Invoice /Bill").setStyle(boldStyle),
-						Components.text("Customer ID: " + invoice.getCustomerId()))
+                .title(Components.text("Invoice /Bill").setStyle(boldStyle).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
+						Components.text("Customer ID: " + invoice.getCustomerId()),
+						Components.text("Date: " + invoice.getDate()))
 				.columns(productIdCol, productNameCol, quantityCol, unitPriceCol, subTotalCol)
 				.setColumnStyle(fieldStyle).setDataSource(ds).highlightDetailEvenRows()
 				
