@@ -15,11 +15,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 import javax.swing.ListSelectionModel;
-import com.toedter.calendar.JDateChooser;
-
-import net.sf.dynamicreports.report.exception.DRException;
-
 import java.awt.Color;
 
 public class InvoiceUI extends JPanel {
@@ -112,17 +109,7 @@ public class InvoiceUI extends JPanel {
 				}
 			}
 		});
-		scrollPane.setViewportView(tableShelf);
-		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.getCalendarButton().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		dateChooser.setDateFormatString("yyyy/MM/dd");
-		dateChooser.setBounds(518, 335, 142, 19);
-		add(dateChooser);
-		
+		scrollPane.setViewportView(tableShelf);	
 		JButton btnClear = new JButton("Clear");
 		btnClear.setForeground(Color.RED);
 		btnClear.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -149,7 +136,8 @@ public class InvoiceUI extends JPanel {
 		btnPrint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//saving and printing invoice
-				invoice.setDate(dateChooser.getDate());
+				Date today = new Date();
+				invoice.setDate(today);
 				invoice.saveInvoice(); //saving invoice
 				
 				//showing invoice to be printed
