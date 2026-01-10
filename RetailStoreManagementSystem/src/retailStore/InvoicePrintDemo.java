@@ -10,11 +10,13 @@ public class InvoicePrintDemo extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-
+	private static Invoice invoice;
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void displayInvoice(Invoice invoice) {
+
+		InvoicePrintDemo.invoice = invoice;
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -38,10 +40,10 @@ public class InvoicePrintDemo extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		////////////////Temporary code
-		Invoice invoice = new Invoice();
-		invoice.setInvoiceNumber(3);
-		invoice.readInvoice();
+//		////////////////Temporary code
+//		Invoice invoice = new Invoice();
+//		invoice.setInvoiceNumber(3);
+//		invoice.readInvoice();
 		
 		//////
 		InvoiceGenerator invoiceGenerator = new InvoiceGenerator();

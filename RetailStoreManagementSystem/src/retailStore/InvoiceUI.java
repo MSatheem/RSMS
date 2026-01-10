@@ -17,6 +17,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ListSelectionModel;
 import com.toedter.calendar.JDateChooser;
+
+import net.sf.dynamicreports.report.exception.DRException;
+
 import java.awt.Color;
 
 public class InvoiceUI extends JPanel {
@@ -148,6 +151,9 @@ public class InvoiceUI extends JPanel {
 				//saving and printing invoice
 				invoice.setDate(dateChooser.getDate());
 				invoice.saveInvoice(); //saving invoice
+				
+				//showing invoice to be printed
+				InvoicePrintDemo.displayInvoice(invoice);
 				invoice = new Invoice(); //next invoice created
 				btnAdd.setEnabled(false);
 				tfTotalPrice.setText(String.valueOf(invoice.getTotal()));
